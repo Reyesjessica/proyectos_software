@@ -40,13 +40,13 @@ El objetivo principal de este proyecto es **desarrollar un sistema de insignias 
 ## 4. Roles y Responsabilidades  
 | Rol | Responsable | Responsabilidades |
 |------|-------------|------------------|
-| **Líder de Proyecto** | [Nombre] | Coordinar las fases del proyecto, asignar tareas y supervisar entregables. |
-| **Diseñador de Insignias** | [Nombre] | Crear los diseños gráficos de las insignias con identidad visual coherente. |
-| **Gestor de Contenido** | [Nombre] | Definir descripciones, criterios de emisión y categorías de cada insignia. |
-| **Desarrollador Blockchain** | [Nombre] | Implementar contratos inteligentes en Soroban para la emisión y validación. |
-| **Desarrollador Web** | [Nombre] | Diseñar y programar la plataforma web para interacción con usuarios. |
-| **Evaluador de Competencias** | [Nombre] | Validar los criterios de asignación de insignias y revisar la coherencia técnica y académica. |
-| **QA / Tester** | [Nombre] | Realizar pruebas de funcionalidad, seguridad y experiencia de usuario. |
+| **Líder de Proyecto** | [BETSABE ARICEL CASTRO RODRIGUEZ] | Coordinar las fases del proyecto, asignar tareas y supervisar entregables. |
+| **Diseñador de Insignias** | [BETSABE ARICEL CASTRO RODRIGUEZ] | Crear los diseños gráficos de las insignias con identidad visual coherente. |
+| **Gestor de Contenido** | [JESSICA REYES ROSARIO] | Definir descripciones, criterios de emisión y categorías de cada insignia. |
+| **Desarrollador Blockchain** | [BETSABE ARICEL CASTRO RODRIGUEZ] | Implementar contratos inteligentes en Soroban para la emisión y validación. |
+| **Desarrollador Web** | [JESSICA REYES ROSARIO] | Diseñar y programar la plataforma web para interacción con usuarios. |
+| **Evaluador de Competencias** | [GERARDO NOE REYES ORTIZ] | Validar los criterios de asignación de insignias y revisar la coherencia técnica y académica. |
+| **QA / Tester** | [GERARDO NOE REYES ORTIZ] | Realizar pruebas de funcionalidad, seguridad y experiencia de usuario. |
 
 ---
 
