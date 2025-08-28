@@ -1,1 +1,1 @@
-Stellar Quest: Insignias que Brillan con tus Logros
+## STELLAR QUEST: INSIGNIAS QUE BRILLAN CON TUS LOGROS
