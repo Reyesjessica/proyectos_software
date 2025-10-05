@@ -1,12 +1,12 @@
-# 🌐 ComuChain – Plataforma de Transparencia Comunitaria
+#  ComuChain – Plataforma de Transparencia Comunitaria
 
-## 🎯 Objetivo
+##  Objetivo
 
 **ComuChain** es una plataforma descentralizada (DApp) que permite a los ciudadanos registrar y consultar en tiempo real los avances de proyectos financiados por recursos públicos en sus comunidades. Su finalidad es fomentar la **transparencia**, la **rendición de cuentas** y la **participación ciudadana**.
 
 ---
 
-## ❓ ¿Qué problema resuelve?
+##  ¿Qué problema resuelve?
 
 - Falta de visibilidad sobre cómo se ejecutan los recursos públicos en obras comunitarias.
 - Escasa documentación accesible de avances reales en tiempo.
@@ -14,7 +14,7 @@
 
 ---
 
-## 🔧 Funcionalidades clave
+## Funcionalidades clave
 
 - Registro de proyectos por parte de autoridades comunitarias.
 - Carga de evidencias (montos, fotografías, avances).
@@ -23,7 +23,7 @@
 
 ---
 
-## 🚀 MVP – Alcance del Producto Mínimo Viable
+##  MVP – Alcance del Producto Mínimo Viable
 
 1. Módulo de Registro de Proyectos.
 2. Subida de imágenes y descripción de avances.
@@ -32,7 +32,7 @@
 
 ---
 
-## 👥 Público objetivo
+## Público objetivo
 
 - Autoridades comunitarias.
 - Ciudadanos interesados en fiscalización y transparencia.
@@ -40,7 +40,7 @@
 
 ---
 
-## 🔗 Beneficios del uso de Blockchain
+##  Beneficios del uso de Blockchain
 
 - Inmutabilidad de registros.
 - Confianza descentralizada.
@@ -48,7 +48,7 @@
 
 ---
 
-## ⚠️ Riesgos identificados
+## Riesgos identificados
 
 - Brecha digital en comunidades rurales.
 - Necesidad de acompañamiento y capacitación.
@@ -56,7 +56,7 @@
 
 ---
 
-## 📄 Resumen Ejecutivo de Factibilidad
+##  Resumen Ejecutivo de Factibilidad
 
 Este proyecto propone el desarrollo de una plataforma digital orientada a fortalecer la transparencia y la participación ciudadana en comunidades locales. La herramienta permitirá a los habitantes registrar los proyectos que les han sido asignados, adjuntando información clave como el monto recibido, fotografías, y avances en tiempo real. Esta funcionalidad busca fomentar la rendición de cuentas, facilitar el monitoreo comunitario y promover la confianza entre los actores involucrados.
 
