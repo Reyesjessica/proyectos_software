@@ -1,50 +1,70 @@
 # 🧩 Actividades Detalladas y Presupuesto por Actividad
 Una ampliación del desglose con más actividades para cada perfil, manteniendo la coherencia con sus roles y ajustando el presupuesto proporcionalmente dentro del total de horas asignadas:
 
-## 👨‍💼 @Manager (PM) – Total: $500
 
-| Actividad                    | Horas | Tarifa/Hora | Subtotal USD |
-|-----------------------------|-------|-------------|--------------|
-| Planificación del proyecto  | 4     | $25         | $100         |
-| Coordinación del equipo     | 5     | $25         | $125         |
-| Seguimiento de entregables  | 4     | $25         | $100         |
-| Comunicación con stakeholders | 3   | $25         | $75          |
-| Gestión de riesgos          | 2     | $25         | $50          |
-| Reuniones de control        | 2     | $25         | $50          |
 
----
+## 👨‍💼 Manager (PM) – Total Estimado
 
-## 🧠 @Architect (Blockchain) – Total: $1,200
+| Actividad                             | Horas Estimadas | Tarifa/Hora | Subtotal USD |
+|--------------------------------------|------------------|-------------|--------------|
+| Planificación del proyecto           | 12               | $25         | $300         |
+| Coordinación del equipo              | 20               | $25         | $500         |
+| Seguimiento de entregables           | 16               | $25         | $400         |
+| Comunicación con stakeholders        | 12               | $25         | $300         |
+| Gestión de riesgos                   | 8                | $25         | $200         |
+| Reuniones de control / status        | 8                | $25         | $200         |
+| Ajustes y gestión de cambios         | 10               | $25         | $250         |
+| Documentación y reportes finales     | 6                | $25         | $150         |
 
-| Actividad                          | Horas | Tarifa/Hora | Subtotal USD |
-|-----------------------------------|-------|-------------|--------------|
-| Diseño de arquitectura blockchain | 8     | $50         | $400         |
-| Selección de tecnologías          | 4     | $50         | $200         |
-| Definición de estándares de seguridad | 4 | $50         | $200         |
-| Supervisión técnica               | 4     | $50         | $200         |
-| Revisión de contratos inteligentes| 2     | $50         | $100         |
-| Validación de integraciones       | 2     | $50         | $100         |
+**🔹 Total PM:** **90 horas** → **$2,100 USD**
 
 ---
 
-## 💻 @Developer (Fullstack) – Total: $980
+## 🧠 Architect (Blockchain) – Total Estimado
 
-| Actividad                | Horas | Tarifa/Hora | Subtotal USD |
-|-------------------------|-------|-------------|--------------|
-| Desarrollo frontend      | 8     | $35         | $280         |
-| Desarrollo backend       | 6     | $35         | $210         |
-| Integración con blockchain | 4   | $35         | $140         |
-| Pruebas y depuración     | 4     | $35         | $140         |
-| Documentación técnica    | 2     | $35         | $70          |
-| Soporte en despliegue    | 4     | $35         | $140         |
+| Actividad                                     | Horas Estimadas | Tarifa/Hora | Subtotal USD |
+|----------------------------------------------|------------------|-------------|--------------|
+| Diseño de arquitectura blockchain            | 40               | $50         | $2,000       |
+| Selección de tecnologías                     | 20               | $50         | $1,000       |
+| Definición de estándares de seguridad        | 20               | $50         | $1,000       |
+| Supervisión técnica continua                 | 30               | $50         | $1,500       |
+| Revisión de contratos inteligentes           | 15               | $50         | $750         |
+| Validación de integraciones / interoperabilidad | 15            | $50         | $750         |
+| Revisiones arquitectónicas y ajustes         | 10               | $50         | $500         |
+| Documentación técnica de arquitectura        | 10               | $50         | $500         |
+
+**🔹 Total Arquitecto:** **160 horas** → **$8,500 USD**
+
+---
+
+## 💻 Developer (Fullstack) – Total Estimado
+
+| Actividad                                     | Horas Estimadas | Tarifa/Hora | Subtotal USD |
+|----------------------------------------------|------------------|-------------|--------------|
+| Desarrollo frontend                           | 80               | $35         | $2,800       |
+| Desarrollo backend                            | 80               | $35         | $2,800       |
+| Integración con blockchain / smart contracts  | 40               | $35         | $1,400       |
+| Pruebas y depuración (testing riguroso)       | 40               | $35         | $1,400       |
+| Optimización, seguridad, auditoría de código  | 30               | $35         | $1,050       |
+| Integración de APIs / servicios externos      | 20               | $35         | $700         |
+| Documentación técnica y soporte post‑despliegue | 20             | $35         | $700         |
+| Soporte de despliegue / producción            | 10               | $35         | $350         |
+
+**🔹 Total Developer:** **320 horas** → **$11,200 USD**
 
 ---
 
-## 💰 Presupuesto Total del Proyecto
+## ⚙️ Resumen General del Proyecto
 
-**Total General:** `$2,680 USD`
+| Rol         | Horas Totales | Costo Estimado |
+|-------------|----------------|----------------|
+| **Manager** | 90             | $2,100         |
+| **Architect** | 160           | $8,500         |
+| **Developer** | 320           | $11,200        |
+| **🔸 Gran Total** | **≈ 570 horas** | **≈ $21,800 USD** |
 
 ---
+
 
 ## 📊 Beneficios del Desglose
 
