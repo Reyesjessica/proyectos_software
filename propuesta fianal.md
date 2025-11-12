@@ -21,12 +21,12 @@ En un contexto donde la confianza en la administración de recursos es fundament
 
 ---
 https://github.com/users/Reyesjessica/projects/6/views/1
-## 3. Asignación de Roles 👥
+## 3. Asignación de Roles 
 
-- **BETSABÉ ARICEL CASTRO RODRÍGUEZ** – Programador principal: responsable de la lógica descentralizada y la integración del backend.  
-- **GERARDO NOE REYES ORTIZ ** – Diseñador de interfaz gráfica: encargado de la experiencia de usuario y accesibilidad.  
-- **JESSICA REYES ROSARIO ** – Redactor de documentación: responsable de la comunicación formal y manuales.  
-- **JESSICA REYES ROSARIO** – Coordinador de pruebas: encargado de validar la funcionalidad y garantizar la calidad del producto.  
+- ** BETSABÉ ARICEL CASTRO RODRÍGUEZ** – Programador principal: responsable de la lógica descentralizada y la integración del backend.  
+- ** GERARDO NOE REYES ORTIZ ** – Diseñador de interfaz gráfica: encargado de la experiencia de usuario y accesibilidad.  
+- ** JESSICA REYES ROSARIO ** – Redactor de documentación: responsable de la comunicación formal y manuales.  
+- ** JESSICA REYES ROSARIO** – Coordinador de pruebas: encargado de validar la funcionalidad y garantizar la calidad del producto.  
 
 Cada miembro se asigna tareas específicas según sus fortalezas, asegurando un trabajo colaborativo y eficiente.
 
@@ -43,15 +43,28 @@ Cada miembro se asigna tareas específicas según sus fortalezas, asegurando un 
 5. Se fomentará el uso de canales oficiales (ej. Slack, Discord) para mantener la comunicación clara y organizada.  
 
 ---
+## 5. Herramientas 
 
-## 5. Evidencias y Transparencia 
+Para garantizar la transparencia y eficiencia del proyecto, el equipo utilizará las siguientes herramientas:
+
+- **GitHub** → Control de versiones, documentación en Markdown, gestión de *issues* y cronogramas.  
+- **Slack / Discord** → Comunicación instantánea y coordinación de reuniones.  
+- **Trello / GitHub Projects** → Organización visual de tareas y dependencias en tableros Kanban.  
+- **Google Drive / OneDrive** → Almacenamiento compartido de evidencias y entregables.  
+- **Figma** → Diseño colaborativo de la interfaz gráfica.  
+- **Soroban (Stellar)** → Integración de contratos inteligentes para la gestión descentralizada de financiamiento.  
+
+
+---
+
+## 6. Evidencias y Transparencia 
 COMUNICHAIN integrará un apartado de evidencias donde se registrarán los avances del proyecto. Estas evidencias incluirán capturas de pantalla, reportes de progreso, entregables parciales y cualquier material que demuestre el cumplimiento de las tareas.  
 
 El repositorio de GitHub servirá como respaldo documental, permitiendo que cualquier miembro de la comunidad pueda verificar el estado del proyecto en tiempo real. Esto asegura que los recursos se utilicen de manera responsable y que los objetivos se cumplan de forma integral.
 
 ---
 
-## 6. Conclusión 
+## 7. Conclusión 
 COMUNICHAIN no es solo una herramienta tecnológica, sino un puente entre la comunidad y la transparencia.  
 Al consolidar justificación, cronograma, roles y políticas de comunicación en un documento formal, se establece una base sólida para la ejecución del proyecto.  
 La plataforma se convierte en un modelo replicable para otras comunidades que buscan gestionar sus iniciativas de manera clara, confiable y participativa.
