@@ -145,6 +145,29 @@ function DashboardContent() {
       {/* Header */}
       {/* ...existing code... */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Hero: imagen de fondo con tema dinero + paisaje */}
+        <section className="mb-8">
+            <div
+              className="relative w-full rounded-2xl overflow-hidden shadow-lg h-56 flex items-end"
+              style={{
+                backgroundImage: `url('/hero.jpg')`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent"></div>
+              <div className="relative z-10 p-6 flex flex-col sm:flex-row items-center justify-between w-full gap-4">
+                <div>
+                  <h1 className="text-2xl md:text-3xl text-white font-extrabold">{session?.user?.username ? `¡Bienvenido, ${session.user.username}!` : 'Bienvenido al Dashboard'}</h1>
+                  <p className="text-sm text-white/90 mt-1">Gestiona proyectos comunitarios y tu cartera — tu espacio seguro</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="text-4xl animate-bounce">💸</div>
+                  <div className="bg-white/20 px-3 py-2 rounded-lg text-sm text-white">Wallet: <span className="font-mono ml-1">{session?.user?.walletAddress ?? '—'}</span></div>
+                </div>
+              </div>
+            </div>
+        </section>
         {/* ...existing code... */}
         {/* Sección de proyectos comunitarios */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
@@ -214,43 +237,32 @@ function DashboardContent() {
             {projects.length === 0 ? (
               <div className="p-6 border border-dashed border-gray-200 rounded-lg text-center text-gray-500">No hay proyectos registrados aún.</div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200 rounded-lg">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avance</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Presupuesto</th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-100">
-                    {projects.map((p, idx) => (
-                      <tr key={idx} className="hover:bg-gray-50 transition">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{p.name}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                          <span className="inline-block bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-semibold">{p.progress}</span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{p.budget}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 text-right">
-                          <div className="flex gap-2 justify-end">
-                            <button
-                              onClick={() => handleEditProject(idx)}
-                              className="px-3 py-1 text-sm bg-yellow-100 text-yellow-800 rounded-md hover:bg-yellow-200"
-                            >
-                              Editar
-                            </button>
-                            <button
-                              onClick={() => handleDeleteProject(idx)}
-                              className="px-3 py-1 text-sm bg-red-100 text-red-800 rounded-md hover:bg-red-200"
-                            >
-                              Borrar
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {projects.map((p, idx) => {
+                  // Try to parse progress percentage
+                  const pctMatch = (p.progress || '').toString().match(/(\d{1,3})/);
+                  const pct = pctMatch ? Math.min(100, parseInt(pctMatch[1], 10)) : 0;
+                  return (
+                    <div key={idx} className="bg-gradient-to-r from-white to-gray-50 hover:from-indigo-50 hover:to-white rounded-xl p-4 shadow-sm transition-transform transform hover:-translate-y-1">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="text-lg font-semibold text-gray-800">{p.name}</h4>
+                          <p className="text-sm text-gray-500 mt-1">Presupuesto: <span className="font-medium">{p.budget}</span></p>
+                        </div>
+                        <div className="text-sm text-gray-500">{pct}%</div>
+                      </div>
+                      <div className="mt-3">
+                        <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                          <div className="h-3 rounded-full bg-gradient-to-r from-green-400 to-blue-500 transition-all" style={{ width: `${pct}%` }} />
+                        </div>
+                      </div>
+                      <div className="mt-3 flex justify-end gap-2">
+                        <button onClick={() => handleEditProject(idx)} className="px-3 py-1 text-sm bg-yellow-100 text-yellow-800 rounded-md hover:bg-yellow-200">Editar</button>
+                        <button onClick={() => handleDeleteProject(idx)} className="px-3 py-1 text-sm bg-red-100 text-red-800 rounded-md hover:bg-red-200">Borrar</button>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>

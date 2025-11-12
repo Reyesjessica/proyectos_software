@@ -8,6 +8,10 @@ import { usePasskey } from "@/hooks/usePasskey";
 export function PasskeyAuth() {
   const [username, setUsername] = useState("");
   const [status, setStatus] = useState<string>("");
+  const [showQR, setShowQR] = useState(false);
+  const [qrPayload, setQrPayload] = useState<string | null>(null);
+  const [qrRaw, setQrRaw] = useState<string | null>(null);
+  const [deliveryMethod, setDeliveryMethod] = useState<"qr" | "device">("qr");
   const router = useRouter();
   
   // Use REAL Passkey hook (WebAuthn)
@@ -32,45 +36,56 @@ export function PasskeyAuth() {
         return;
       }
 
-      setStatus("✅ Passkey creado! Creando sesión...");
+      if (deliveryMethod === "device") {
+        // Persist credential on this device and create session
+        setStatus("✅ Passkey creado! Guardando en este dispositivo...");
 
-      // Buscar si ya existe credencial para este usuario
-      let credentials = [];
-      const storedCreds = localStorage.getItem('passkey-credentials');
-      if (storedCreds) {
-        credentials = JSON.parse(storedCreds);
+        try {
+          await SessionManager.createSession(
+            normalizedUsername,
+            result.credentialId!,
+            `${normalizedUsername}@ebas.demo`
+          );
+
+          setStatus(`✅ Registrado y conectado como ${normalizedUsername}`);
+          setTimeout(() => router.push('/dashboard'), 800);
+          return;
+        } catch (e) {
+          console.error('Error creating session after local save', e);
+          setStatus('❌ Error guardando la sesión localmente');
+          return;
+        }
       }
-      let credIndex = credentials.findIndex((c: any) => c.username === normalizedUsername);
-      let walletAddress;
-      if (credIndex !== -1 && credentials[credIndex].walletAddress) {
-        // Si ya existe, reutilizar la wallet y actualizar credentialId si cambió
-        walletAddress = credentials[credIndex].walletAddress;
-        credentials[credIndex].credentialId = result.credentialId!;
-        credentials[credIndex].email = `${normalizedUsername}@ebas.demo`;
-        localStorage.setItem('passkey-credentials', JSON.stringify(credentials));
-      } else {
-        // Si no existe, crear nueva wallet derivada de la clave pública y asociar
-        walletAddress = await SessionManager.createSession(
-          normalizedUsername,
-          result.credentialId!,
-          `${normalizedUsername}@ebas.demo`,
-          undefined,
-          result.publicKey
-        ).then(s => s.user.walletAddress);
-        credentials.push({
+
+      // Otherwise deliver via QR for mobile storage
+      setStatus("✅ Passkey creado! Generando QR para transferencia a móvil...");
+
+      try {
+        // Generate a wallet keypair without persisting locally
+        // @ts-ignore - dynamic import of SessionManager helper
+        const { generateWalletNoPersist } = await import("@/lib/session");
+        const wallet = generateWalletNoPersist(normalizedUsername);
+
+        const payload = {
           username: normalizedUsername,
-          credentialId: result.credentialId!,
-          email: `${normalizedUsername}@ebas.demo`,
-          walletAddress
-        });
-        localStorage.setItem('passkey-credentials', JSON.stringify(credentials));
-      }
+          credentialId: result.credentialId,
+          // publicKey is a Uint8Array; serialize as base64 for QR transfer
+          publicKey: result.publicKey ? btoa(String.fromCharCode(...Array.from(result.publicKey))) : undefined,
+          walletAddress: wallet.publicKey,
+          generatedAt: new Date().toISOString(),
+        };
 
-      setStatus(`✅ ¡Registro exitoso! Bienvenido ${username}`);
-      // Redirigir al dashboard
-      setTimeout(() => {
-        router.push('/dashboard');
-      }, 1000);
+  const payloadStr = JSON.stringify(payload, null, 2);
+  // Use Google Chart API for QR image (URL-encoded payload)
+  const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=400x400&chl=${encodeURIComponent(payloadStr)}`;
+  setQrPayload(qrUrl);
+  setQrRaw(payloadStr);
+        setShowQR(true);
+        setStatus("🔎 Escanea el QR con tu teléfono para guardar la credencial allí.");
+      } catch (e) {
+        console.error('Error generating QR payload', e);
+        setStatus('❌ Error generando QR');
+      }
       
     } catch (err) {
       console.error('Registration error:', err);
@@ -126,12 +141,11 @@ export function PasskeyAuth() {
         walletAddress = await SessionManager.getWalletAddress();
       }
 
-      // Crear sesión con la wallet recuperada
+      // Crear sesión con la wallet recuperada (SessionManager genera/recupera wallet internamente)
       await SessionManager.createSession(
         credential.username,
         result.credentialId!,
-        credential.email || `${credential.username}@ebas.demo`,
-        walletAddress
+        credential.email || `${credential.username}@ebas.demo`
       );
 
       setStatus(`✅ ¡Bienvenido de vuelta, ${credential.username}!`);
@@ -197,6 +211,37 @@ export function PasskeyAuth() {
         />
       </div>
 
+      {/* Método de entrega */}
+      <div className="pt-4">
+        <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+          ¿Cómo quieres recibir la Passkey?
+        </label>
+        <div className="flex items-center gap-4">
+          <label className="inline-flex items-center gap-2">
+            <input
+              type="radio"
+              name="delivery"
+              value="qr"
+              checked={deliveryMethod === "qr"}
+              onChange={() => setDeliveryMethod("qr")}
+              className="form-radio text-purple-600"
+            />
+            <span className="text-sm">Por QR (escanea en tu teléfono)</span>
+          </label>
+          <label className="inline-flex items-center gap-2">
+            <input
+              type="radio"
+              name="delivery"
+              value="device"
+              checked={deliveryMethod === "device"}
+              onChange={() => setDeliveryMethod("device")}
+              className="form-radio text-purple-600"
+            />
+            <span className="text-sm">Guardar en este equipo</span>
+          </label>
+        </div>
+      </div>
+
       {/* Botones de acción */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <button
@@ -259,6 +304,48 @@ export function PasskeyAuth() {
           )}
         </button>
       </div>
+
+      {/* QR preview (cuando se genera) */}
+      {showQR && qrPayload && (
+        <div className="mt-4 p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-center space-y-3">
+          <p className="text-sm mb-2">Escanea este código con la cámara o app de tu teléfono:</p>
+          <img src={qrPayload} alt="QR de transferencia de passkey" className="mx-auto w-56 h-56 rounded-md shadow" />
+
+          {/* Raw JSON payload (copiable) */}
+          {qrRaw && (
+            <div className="mt-2 text-left">
+              <label className="text-xs text-gray-500 dark:text-gray-400">JSON de la transferencia (puedes copiarlo manualmente):</label>
+              <div className="mt-1 relative">
+                <textarea
+                  readOnly
+                  value={qrRaw}
+                  className="w-full h-36 p-2 text-xs font-mono bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-md resize-none"
+                />
+                <button
+                  onClick={() => {
+                    if (qrRaw) {
+                      navigator.clipboard.writeText(qrRaw);
+                      setStatus('✅ JSON copiado al portapapeles');
+                    }
+                  }}
+                  className="absolute right-2 top-2 bg-purple-600 text-white px-3 py-1 rounded-md text-xs"
+                >Copiar</button>
+              </div>
+            </div>
+          )}
+
+          <div className="mt-3 flex justify-center gap-3">
+            <button
+              onClick={() => {
+                setShowQR(false);
+                setQrPayload(null);
+                setQrRaw(null);
+              }}
+              className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md text-sm"
+            >Cerrar</button>
+          </div>
+        </div>
+      )}
 
       {/* Mensaje de estado */}
       {(status || error) && (

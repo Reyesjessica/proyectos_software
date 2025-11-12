@@ -59,6 +59,16 @@ export async function generateAndPersistWallet(username: string): Promise<{ publ
 }
 
 /**
+ * Generate a Stellar wallet keypair WITHOUT persisting it to localStorage.
+ * Useful when the UI wants to provide key data to another device (QR) before
+ * deciding whether to persist locally.
+ */
+export function generateWalletNoPersist(username?: string): { publicKey: string; secret: string } {
+  const keypair = Keypair.random();
+  return { publicKey: keypair.publicKey(), secret: keypair.secret() };
+}
+
+/**
  * Recupera la clave pública y privada Ed25519 asociada al usuario
  */
 export function getWalletForUser(username: string): { publicKey: string; secret: string } | null {
