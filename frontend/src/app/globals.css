@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0f172a; /* Dark blue */
+  --foreground: #e2e8f0; /* Light gray */
+  --primary: #2563eb; /* Blue */
+  --secondary: #10b981; /* Green */
+  --accent: #9333ea; /* Purple */
+  --muted: #64748b; /* Muted gray */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0e1a; /* Darker blue */
+    --foreground: #cbd5e1; /* Softer gray */
+    --primary: #1d4ed8; /* Darker blue */
+    --secondary: #059669; /* Darker green */
+    --accent: #7e22ce; /* Darker purple */
+    --muted: #475569; /* Darker muted gray */
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: 'Inter', sans-serif;
+}
+
+button {
+  font-family: inherit;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@layer utilities {
+  .text-primary {
+    color: var(--primary);
+  }
+  .bg-primary {
+    background-color: var(--primary);
+  }
+  .text-secondary {
+    color: var(--secondary);
+  }
+  .bg-secondary {
+    background-color: var(--secondary);
+  }
+  .text-accent {
+    color: var(--accent);
+  }
+  .bg-accent {
+    background-color: var(--accent);
+  }
+}
+
+/* Custom animations for passkey interactions */
+@keyframes fingerprint-scan {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+.fingerprint-scan {
+  animation: fingerprint-scan 2s ease-in-out infinite;
+}
+
+/* Glassmorphism effect */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  .glass {
+    background: rgba(168, 105, 105, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
