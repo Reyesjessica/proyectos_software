@@ -186,6 +186,16 @@ function DashboardContent() {
               <img
                 src="/hero.jpg"
                 alt="Ilustración de login"
+                onError={(e) => {
+                  // If image fails to load, replace with an inline SVG placeholder so it's always visible
+                  try {
+                    const target = e.currentTarget as HTMLImageElement;
+                    const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='320' height='220' viewBox='0 0 320 220'><rect width='100%' height='100%' fill='#6b21a8'/><text x='50%' y='50%' fill='white' font-size='20' font-family='Arial' text-anchor='middle' dy='.3em'>Imagen de login</text></svg>`;
+                    target.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+                  } catch (err) {
+                    // no-op
+                  }
+                }}
                 className="w-40 h-28 rounded-lg object-cover shadow-lg border border-white/20"
               />
             </div>
