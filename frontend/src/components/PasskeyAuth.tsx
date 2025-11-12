@@ -10,7 +10,6 @@ export function PasskeyAuth() {
   const [status, setStatus] = useState<string>("");
   const [showQR, setShowQR] = useState(false);
   const [qrPayload, setQrPayload] = useState<string | null>(null);
-  const [qrRaw, setQrRaw] = useState<string | null>(null);
   const [deliveryMethod, setDeliveryMethod] = useState<"qr" | "device">("qr");
   const router = useRouter();
   
@@ -75,11 +74,19 @@ export function PasskeyAuth() {
           generatedAt: new Date().toISOString(),
         };
 
-  const payloadStr = JSON.stringify(payload, null, 2);
-  // Use Google Chart API for QR image (URL-encoded payload)
-  const qrUrl = `https://chart.googleapis.com/chart?cht=qr&chs=400x400&chl=${encodeURIComponent(payloadStr)}`;
-  setQrPayload(qrUrl);
-  setQrRaw(payloadStr);
+        const payloadStr = JSON.stringify(payload);
+
+        // Try to generate QR locally (preferred) using the lightweight 'qrcode' lib.
+        // This avoids external API failures and URL length limits.
+        try {
+          const QRCode = await import('qrcode');
+          const dataUrl = await QRCode.toDataURL(payloadStr, { width: 400 });
+          setQrPayload(dataUrl);
+        } catch (e) {
+          // Fallback to public QR generator if the package isn't installed or fails
+          const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(payloadStr)}`;
+          setQrPayload(qrUrl);
+        }
         setShowQR(true);
         setStatus("🔎 Escanea el QR con tu teléfono para guardar la credencial allí.");
       } catch (e) {
@@ -311,35 +318,13 @@ export function PasskeyAuth() {
           <p className="text-sm mb-2">Escanea este código con la cámara o app de tu teléfono:</p>
           <img src={qrPayload} alt="QR de transferencia de passkey" className="mx-auto w-56 h-56 rounded-md shadow" />
 
-          {/* Raw JSON payload (copiable) */}
-          {qrRaw && (
-            <div className="mt-2 text-left">
-              <label className="text-xs text-gray-500 dark:text-gray-400">JSON de la transferencia (puedes copiarlo manualmente):</label>
-              <div className="mt-1 relative">
-                <textarea
-                  readOnly
-                  value={qrRaw}
-                  className="w-full h-36 p-2 text-xs font-mono bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-md resize-none"
-                />
-                <button
-                  onClick={() => {
-                    if (qrRaw) {
-                      navigator.clipboard.writeText(qrRaw);
-                      setStatus('✅ JSON copiado al portapapeles');
-                    }
-                  }}
-                  className="absolute right-2 top-2 bg-purple-600 text-white px-3 py-1 rounded-md text-xs"
-                >Copiar</button>
-              </div>
-            </div>
-          )}
+          {/* (JSON raw removed per user request) */}
 
           <div className="mt-3 flex justify-center gap-3">
             <button
               onClick={() => {
                 setShowQR(false);
                 setQrPayload(null);
-                setQrRaw(null);
               }}
               className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md text-sm"
             >Cerrar</button>

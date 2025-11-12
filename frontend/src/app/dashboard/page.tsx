@@ -158,7 +158,13 @@ function DashboardContent() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent"></div>
               <div className="relative z-10 p-6 flex flex-col sm:flex-row items-center justify-between w-full gap-4">
                 <div>
-                  <h1 className="text-2xl md:text-3xl text-white font-extrabold">{session?.user?.username ? `¡Bienvenido, ${session.user.username}!` : 'Bienvenido al Dashboard'}</h1>
+                  <h1 className="text-2xl md:text-3xl text-white font-extrabold">
+                    {session?.user?.username ? (
+                      <span>¡Bienvenido, <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-500">{session.user.username}</span>!</span>
+                    ) : (
+                      'Bienvenido al Dashboard'
+                    )}
+                  </h1>
                   <p className="text-sm text-white/90 mt-1">Gestiona proyectos comunitarios y tu cartera — tu espacio seguro</p>
                 </div>
                 <div className="flex items-center gap-3">
@@ -175,6 +181,14 @@ function DashboardContent() {
 
           {/* Formulario estilizado */}
           <div className="mb-6">
+            {/* Imagen relacionada al login / registro de proyectos */}
+            <div className="flex justify-center md:justify-end mb-4">
+              <img
+                src="/hero.jpg"
+                alt="Ilustración de login"
+                className="w-40 h-28 rounded-lg object-cover shadow-lg border border-white/20"
+              />
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
               <div className="col-span-1 md:col-span-2">
                 <label className="block text-sm font-medium text-gray-600 mb-1">Nombre del proyecto</label>
