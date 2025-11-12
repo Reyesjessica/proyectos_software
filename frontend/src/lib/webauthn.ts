@@ -4,6 +4,7 @@
  */
 
 import type { PasskeyResult } from "@/hooks/usePasskey";
+import { decode as cborDecode } from 'cbor-x';
 
 /**
  * Check if the browser supports WebAuthn
@@ -52,21 +53,80 @@ function base64UrlToBuffer(base64url: string): Uint8Array {
  * Extract the public key from the credential response
  * Converts from COSE format to raw secp256r1 coordinates
  */
+function bufferToUint8Array(buf: ArrayBuffer | Buffer | Uint8Array): Uint8Array {
+  if (buf instanceof Uint8Array) return buf;
+  if (buf instanceof ArrayBuffer) return new Uint8Array(buf);
+  // Node Buffer
+  return new Uint8Array(buf as any);
+}
+
 function extractPublicKey(credential: PublicKeyCredential): Uint8Array {
-  const response = credential.response as AuthenticatorAttestationResponse;
-  
-  // Get the attestation object
-  const attestationObject = response.attestationObject;
-  
-  // For simplicity, we'll extract from the raw public key bytes
-  // In production, you'd want to properly parse the COSE key
-  // This is a simplified version for demonstration
-  
-  // The public key is in the attestation object's authData
-  // For now, return a placeholder - you'd need a COSE decoder in production
-  const publicKeyBytes = new Uint8Array(64); // 32 bytes X + 32 bytes Y
-  
-  return publicKeyBytes;
+  // Parse attestationObject to extract the credentialPublicKey (COSE Key), then
+  // decode COSE to raw uncompressed X||Y (64 bytes) for secp256r1.
+  try {
+    const response = credential.response as AuthenticatorAttestationResponse;
+    const attestationObject = bufferToUint8Array(response.attestationObject as any);
+
+    // attestationObject is CBOR encoded structure: {fmt, authData, attStmt}
+  // cborDecode expects a Buffer/Uint8Array; ensure we pass Uint8Array
+  const decoded = cborDecode(new Uint8Array(attestationObject.buffer));
+  const authData = bufferToUint8Array((decoded as any).authData as ArrayBuffer);
+
+    // authData layout: rpIdHash(32) | flags(1) | signCount(4) | attestedCredentialData?
+    let pointer = 0;
+    // rpIdHash
+    pointer += 32;
+    // flags
+    pointer += 1;
+    // signCount
+    pointer += 4;
+
+    // Check if attested credential data flag (0x40) is set
+    const flags = authData[32];
+    const AT_FLAG = 0x40;
+    if (!(flags & AT_FLAG)) {
+      throw new Error('No attested credential data present in authData');
+    }
+
+    // aaguid
+    const aaguid = authData.slice(pointer, pointer + 16);
+    pointer += 16;
+
+    // credentialId length (big-endian uint16)
+    const credIdLen = (authData[pointer] << 8) | authData[pointer + 1];
+    pointer += 2;
+
+    // credentialId
+    const credentialId = authData.slice(pointer, pointer + credIdLen);
+    pointer += credIdLen;
+
+    // The remaining bytes are the credentialPublicKey in CBOR format
+    const publicKeyCbor = authData.slice(pointer);
+
+    // Decode the COSE key
+  const cose = cborDecode(new Uint8Array(publicKeyCbor.buffer)) as any;
+
+    // COSE EC2 key parameters: -2 => x, -3 => y
+    const x = bufferToUint8Array(cose.get ? cose.get(-2) : cose[-2]);
+    const y = bufferToUint8Array(cose.get ? cose.get(-3) : cose[-3]);
+
+    if (!x || !y) {
+      throw new Error('Invalid COSE key structure; missing x/y coordinates');
+    }
+
+    // Ensure x and y are 32 bytes each
+    const xBytes = x.length === 32 ? x : x.slice(-32);
+    const yBytes = y.length === 32 ? y : y.slice(-32);
+
+    const raw = new Uint8Array(64);
+    raw.set(xBytes, 0);
+    raw.set(yBytes, 32);
+    return raw;
+  } catch (err) {
+    console.error('extractPublicKey error:', err);
+    // Fallback: return zeroed 64 bytes to avoid crashes; caller should detect
+    return new Uint8Array(64);
+  }
 }
 
 /**
