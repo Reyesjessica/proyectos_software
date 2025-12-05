@@ -115,25 +115,27 @@ const SuccessNotification: React.FC<SuccessNotificationProps> = ({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-16 h-16 text-green-400 animate-spin mx-auto mb-6" />
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center p-6">
+        <div className="text-center max-w-md">
+          <div className="mb-6">
+            <Loader2 className="w-16 h-16 text-purple-400 animate-spin mx-auto" />
+          </div>
           <h2 className="text-3xl font-bold text-white mb-4">Procesando tu Préstamo</h2>
-          <p className="text-xl text-gray-300 mb-6">
+          <p className="text-xl text-gray-300 mb-8">
             Verificando fondos y ejecutando smart contract...
           </p>
-          <div className="space-y-3 text-left max-w-md mx-auto">
+          <div className="space-y-4 text-left">
             <div className="flex items-center space-x-3 text-green-400">
-              <CheckCircle className="w-5 h-5" />
-              <span>Verificando elegibilidad ✓</span>
+              <span className="text-2xl">✓</span>
+              <span className="font-medium">Verificando elegibilidad</span>
             </div>
             <div className="flex items-center space-x-3 text-green-400">
-              <CheckCircle className="w-5 h-5" />
-              <span>Validando balance del pool ✓</span>
+              <span className="text-2xl">✓</span>
+              <span className="font-medium">Validando balance del pool</span>
             </div>
-            <div className="flex items-center space-x-3 text-yellow-400">
+            <div className="flex items-center space-x-3 text-purple-400">
               <Loader2 className="w-5 h-5 animate-spin" />
-              <span>Ejecutando contrato en Stellar...</span>
+              <span className="font-medium">Ejecutando contrato en Stellar...</span>
             </div>
           </div>
         </div>
@@ -143,22 +145,22 @@ const SuccessNotification: React.FC<SuccessNotificationProps> = ({
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center p-6">
         <div className="max-w-md mx-auto text-center">
-          <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-6" />
+          <div className="text-6xl mb-6">❌</div>
           <h2 className="text-3xl font-bold text-white mb-4">Error en el Préstamo</h2>
-          <p className="text-xl text-gray-300 mb-8">{error}</p>
+          <p className="text-lg text-gray-300 mb-8">{error}</p>
           
-          <div className="space-y-4">
+          <div className="space-y-3">
             <button
               onClick={onStartOver}
-              className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+              className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg"
             >
               Intentar de Nuevo
             </button>
             <button
               onClick={onViewDashboard}
-              className="w-full px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg"
+              className="w-full px-6 py-3 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white font-semibold rounded-lg transition-all duration-300"
             >
               Volver al Dashboard
             </button>
@@ -171,38 +173,44 @@ const SuccessNotification: React.FC<SuccessNotificationProps> = ({
   if (!loanResult || !loanResult.success) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 p-6 text-white">
+      {/* Background Spheres */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float"></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-purple-500 to-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float" style={{animationDelay: '2s'}}></div>
+      </div>
+
+      <div className="max-w-5xl mx-auto relative z-10">
         {/* Success Header */}
-        <div className="text-center mb-8">
-          <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
-            <CheckCircle className="w-12 h-12 text-white" />
+        <div className="text-center mb-12">
+          <div className="w-24 h-24 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/50">
+            <span className="text-5xl">✓</span>
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
-            ¡Préstamo <span className="text-green-400">Aprobado!</span>
+          <h1 className="text-5xl md:text-6xl font-bold mb-4">
+            ¡Préstamo <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-emerald-400">Aprobado!</span>
           </h1>
-          <p className="text-2xl text-gray-300">
-            Tu préstamo se ha procesado exitosamente
+          <p className="text-xl text-gray-300">
+            Tu préstamo se ha procesado exitosamente en blockchain
           </p>
         </div>
 
         {/* Transaction Details Card */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20 mb-8">
-          <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-            <Wallet className="w-6 h-6 mr-3" />
+        <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-3xl p-10 border border-purple-500/20 mb-10 backdrop-blur-sm">
+          <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+            <span className="text-3xl">💰</span>
             Detalles de la Transacción
           </h2>
           
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
             {/* Amount */}
-            <div className="bg-white/10 rounded-2xl p-6">
+            <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-2xl p-6 border border-green-500/20">
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
-                  <DollarSign className="w-6 h-6 text-white" />
+                <div className="w-14 h-14 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <span className="text-2xl">💵</span>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white">Monto</h3>
-                  <p className="text-gray-400">USDC transferido</p>
+                  <h3 className="text-sm font-semibold text-gray-400">Monto</h3>
+                  <p className="text-lg font-bold text-white">USDC Transferido</p>
                 </div>
               </div>
               <div className="text-4xl font-bold text-green-400">
@@ -211,92 +219,97 @@ const SuccessNotification: React.FC<SuccessNotificationProps> = ({
             </div>
 
             {/* Interest Rate */}
-            <div className="bg-white/10 rounded-2xl p-6">
+            <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-2xl p-6 border border-blue-500/20">
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
-                  <CreditCard className="w-6 h-6 text-white" />
+                <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <span className="text-2xl">📊</span>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white">Tasa de Interés</h3>
-                  <p className="text-gray-400">APR</p>
+                  <h3 className="text-sm font-semibold text-gray-400">Tasa</h3>
+                  <p className="text-lg font-bold text-white">APR Anual</p>
                 </div>
               </div>
               <div className="text-4xl font-bold text-blue-400">
                 {(loanResult.interest_rate! * 100).toFixed(1)}%
               </div>
             </div>
+          </div>
 
+          {/* Hash and ID */}
+          <div className="grid md:grid-cols-2 gap-6">
             {/* Transaction Hash */}
-            <div className="bg-white/10 rounded-2xl p-6">
+            <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-2xl p-6 border border-purple-500/20">
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center">
-                  <ExternalLink className="w-6 h-6 text-white" />
+                <div className="w-14 h-14 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <span className="text-2xl">🔗</span>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white">Transaction Hash</h3>
-                  <p className="text-gray-400">Stellar blockchain</p>
+                  <h3 className="text-sm font-semibold text-gray-400">TX Hash</h3>
+                  <p className="text-lg font-bold text-white">Stellar Blockchain</p>
                 </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <code className="text-sm text-purple-400 font-mono truncate">
+              <div className="flex items-center space-x-2 mt-3">
+                <code className="text-xs text-purple-300 font-mono bg-purple-500/10 px-3 py-2 rounded flex-1 truncate">
                   {loanResult.transaction_hash!.substring(0, 20)}...
                 </code>
                 <button
                   onClick={() => copyToClipboard(loanResult.transaction_hash!, 'hash')}
-                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  className="p-2 hover:bg-purple-500/20 rounded-lg transition-colors"
+                  title="Copiar"
                 >
-                  <Copy className="w-4 h-4 text-gray-400" />
+                  <Copy className="w-4 h-4 text-purple-400" />
                 </button>
               </div>
               {copied === 'hash' && (
-                <p className="text-green-400 text-xs mt-1">¡Copiado!</p>
+                <p className="text-green-400 text-xs mt-2 font-semibold">✓ ¡Copiado!</p>
               )}
             </div>
 
             {/* Loan ID */}
-            <div className="bg-white/10 rounded-2xl p-6">
+            <div className="bg-gradient-to-br from-orange-500/10 to-yellow-500/10 rounded-2xl p-6 border border-orange-500/20">
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center">
-                  <Calendar className="w-6 h-6 text-white" />
+                <div className="w-14 h-14 bg-gradient-to-br from-orange-600 to-yellow-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <span className="text-2xl">🆔</span>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white">Loan ID</h3>
-                  <p className="text-gray-400">Identificador único</p>
+                  <h3 className="text-sm font-semibold text-gray-400">Loan ID</h3>
+                  <p className="text-lg font-bold text-white">Identificador Único</p>
                 </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <code className="text-sm text-orange-400 font-mono">
+              <div className="flex items-center space-x-2 mt-3">
+                <code className="text-xs text-orange-300 font-mono bg-orange-500/10 px-3 py-2 rounded flex-1 truncate">
                   {loanResult.loan_id}
                 </code>
                 <button
                   onClick={() => copyToClipboard(loanResult.loan_id!, 'id')}
-                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  className="p-2 hover:bg-orange-500/20 rounded-lg transition-colors"
+                  title="Copiar"
                 >
-                  <Copy className="w-4 h-4 text-gray-400" />
+                  <Copy className="w-4 h-4 text-orange-400" />
                 </button>
               </div>
               {copied === 'id' && (
-                <p className="text-green-400 text-xs mt-1">¡Copiado!</p>
+                <p className="text-green-400 text-xs mt-2 font-semibold">✓ ¡Copiado!</p>
               )}
             </div>
           </div>
 
           {/* Timeline */}
-          <div className="mt-8 p-6 bg-white/10 rounded-2xl">
-            <h3 className="text-xl font-bold text-white mb-4 flex items-center">
-              <Clock className="w-5 h-5 mr-2" />
+          <div className="mt-8 p-6 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-2xl border border-blue-500/20">
+            <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+              <span className="text-2xl">⏱️</span>
               Cronología
             </h3>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-gray-300">Procesado</span>
-                <span className="text-white font-medium">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-3 bg-blue-500/5 rounded-lg">
+                <span className="text-gray-300 font-medium">Procesado</span>
+                <span className="text-white font-bold">
                   {formatDate(loanResult.timestamp!)}
                 </span>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-gray-300">Fecha de Pago</span>
-                <span className="text-yellow-400 font-medium">
+              <div className="flex items-center justify-between p-3 bg-yellow-500/5 rounded-lg">
+                <span className="text-gray-300 font-medium">Fecha de Pago</span>
+                <span className="text-yellow-400 font-bold">
                   {formatDate(loanResult.repayment_due_date!)}
                 </span>
               </div>
@@ -305,33 +318,36 @@ const SuccessNotification: React.FC<SuccessNotificationProps> = ({
         </div>
 
         {/* Next Steps */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 mb-8">
-          <h2 className="text-xl font-bold text-white mb-4">Próximos Pasos</h2>
-          <div className="space-y-3">
-            <div className="flex items-start space-x-3">
-              <CheckCircle className="w-5 h-5 text-green-400 mt-0.5" />
+        <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-2xl p-8 border border-blue-500/20 mb-10 backdrop-blur-sm">
+          <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+            <span className="text-3xl">🎯</span>
+            Próximos Pasos
+          </h2>
+          <div className="space-y-4">
+            <div className="flex items-start space-x-4 p-4 bg-blue-500/5 rounded-lg">
+              <span className="text-2xl flex-shrink-0">✓</span>
               <div>
-                <h3 className="text-white font-medium">Los USDC están en tu wallet</h3>
+                <h3 className="text-white font-semibold mb-1">Los USDC están en tu wallet</h3>
                 <p className="text-gray-400 text-sm">
                   Revisa tu wallet Stellar para confirmar la recepción de fondos
                 </p>
               </div>
             </div>
-            <div className="flex items-start space-x-3">
-              <Clock className="w-5 h-5 text-yellow-400 mt-0.5" />
+            <div className="flex items-start space-x-4 p-4 bg-yellow-500/5 rounded-lg">
+              <span className="text-2xl flex-shrink-0">⏰</span>
               <div>
-                <h3 className="text-white font-medium">Prepara el pago</h3>
+                <h3 className="text-white font-semibold mb-1">Prepara el pago</h3>
                 <p className="text-gray-400 text-sm">
                   El pago vence el {formatDate(loanResult.repayment_due_date!)}
                 </p>
               </div>
             </div>
-            <div className="flex items-start space-x-3">
-              <Download className="w-5 h-5 text-blue-400 mt-0.5" />
+            <div className="flex items-start space-x-4 p-4 bg-green-500/5 rounded-lg">
+              <span className="text-2xl flex-shrink-0">💾</span>
               <div>
-                <h3 className="text-white font-medium">Guarda este recibo</h3>
+                <h3 className="text-white font-semibold mb-1">Guarda este recibo</h3>
                 <p className="text-gray-400 text-sm">
-                  Usa el Loan ID {loanResult.loan_id} para consultas futuras
+                  Usa el Loan ID <code className="text-green-400">{loanResult.loan_id}</code> para consultas futuras
                 </p>
               </div>
             </div>
@@ -339,18 +355,18 @@ const SuccessNotification: React.FC<SuccessNotificationProps> = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-3 gap-4 mb-8">
           <button
             onClick={() => window.open(`https://stellar.expert/explorer/testnet/tx/${loanResult.transaction_hash}`, '_blank')}
-            className="flex items-center justify-center space-x-2 px-6 py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-semibold transition-all"
+            className="flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white rounded-xl font-bold transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/50"
           >
             <ExternalLink className="w-5 h-5" />
             <span>Ver en Stellar</span>
           </button>
           
           <button
-            onClick={() => window.location.href = '/ebas-dashboard'}
-            className="flex items-center justify-center space-x-2 px-6 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-all"
+            onClick={() => window.location.href = '/dashboard'}
+            className="flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white rounded-xl font-bold transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/50"
           >
             <Wallet className="w-5 h-5" />
             <span>Mi Dashboard</span>
@@ -358,7 +374,7 @@ const SuccessNotification: React.FC<SuccessNotificationProps> = ({
           
           <button
             onClick={onStartOver}
-            className="flex items-center justify-center space-x-2 px-6 py-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-semibold transition-all"
+            className="flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white rounded-xl font-bold transition-all duration-300 hover:shadow-lg hover:shadow-green-500/50"
           >
             <ArrowRight className="w-5 h-5" />
             <span>Nuevo Préstamo</span>
@@ -366,9 +382,9 @@ const SuccessNotification: React.FC<SuccessNotificationProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-8 text-gray-400">
-          <p className="text-sm">
-            ¿Preguntas? Contacta soporte con tu Loan ID: {loanResult.loan_id}
+        <div className="text-center text-gray-400 text-sm">
+          <p>
+            ¿Preguntas? Contacta soporte con tu Loan ID: <code className="text-purple-400">{loanResult.loan_id}</code>
           </p>
         </div>
       </div>

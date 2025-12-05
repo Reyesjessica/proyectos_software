@@ -142,15 +142,17 @@ const CreditProfile: React.FC<CreditProfileProps> = ({ incomeData, onRequestLoan
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center p-6">
         <div className="text-center">
-          <Loader2 className="w-16 h-16 text-blue-400 animate-spin mx-auto mb-6" />
-          <h2 className="text-2xl font-bold text-white mb-4">Calculando tu Credit Score</h2>
-          <p className="text-gray-300">
+          <div className="inline-block">
+            <Loader2 className="w-16 h-16 text-purple-400 animate-spin mb-6" />
+          </div>
+          <h2 className="text-3xl font-bold text-white mb-4">Calculando tu Credit Score</h2>
+          <p className="text-gray-300 mb-8">
             Analizando {incomeData.gig_platforms.length} plataformas y {incomeData.monthly_earnings.length} meses de datos...
           </p>
-          <div className="mt-6 w-64 bg-gray-700 rounded-full h-2 mx-auto">
-            <div className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full animate-pulse" style={{width: '75%'}}></div>
+          <div className="w-64 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full h-2 mx-auto border border-purple-500/20">
+            <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full animate-pulse" style={{width: '75%'}}></div>
           </div>
         </div>
       </div>
@@ -159,14 +161,14 @@ const CreditProfile: React.FC<CreditProfileProps> = ({ incomeData, onRequestLoan
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="text-center">
-          <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-6" />
-          <h2 className="text-2xl font-bold text-white mb-4">Error</h2>
-          <p className="text-gray-300 mb-6">{error}</p>
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center p-6">
+        <div className="max-w-md text-center">
+          <div className="inline-block mb-6 text-6xl">❌</div>
+          <h2 className="text-3xl font-bold text-white mb-4">Error al Calcular Score</h2>
+          <p className="text-gray-300 mb-8">{error}</p>
           <button
             onClick={onBack}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg"
+            className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/50"
           >
             Volver
           </button>
@@ -178,80 +180,87 @@ const CreditProfile: React.FC<CreditProfileProps> = ({ incomeData, onRequestLoan
   if (!creditResult) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 p-6 text-white">
+      {/* Background Spheres */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float"></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-blue-500 to-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float" style={{animationDelay: '2s'}}></div>
+      </div>
+
+      <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Tu <span className="text-green-400">Credit Score</span>
+        <div className="text-center mb-12">
+          <div className="inline-block mb-4 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full">
+            <span className="text-purple-300 text-sm font-semibold">📊 Análisis de Crédito</span>
+          </div>
+          <h1 className="text-5xl md:text-6xl font-bold mb-4">
+            Tu <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">Credit Score</span>
           </h1>
-          <p className="text-xl text-gray-300">
-            Basado en el análisis de tus ingresos y perfil financiero
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            Análisis integral de tu perfil financiero y elegibilidad de crédito
           </p>
         </div>
 
         {/* Main Score Display */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20 mb-8">
-          <div className="text-center mb-8">
-            <div className={`text-8xl md:text-9xl font-bold ${getScoreColor(creditResult.credit_score)} mb-4`}>
+        <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-3xl p-12 border border-purple-500/20 mb-12 backdrop-blur-sm">
+          <div className="text-center mb-10">
+            <div className={`text-9xl md:text-10xl font-bold bg-clip-text text-transparent bg-gradient-to-r ${getScoreGradient(creditResult.credit_score)} mb-4`}>
               {creditResult.credit_score}
             </div>
-            <div className="text-2xl text-gray-300 mb-6">
-              {creditResult.credit_score >= 800 && 'Excelente'}
-              {creditResult.credit_score >= 750 && creditResult.credit_score < 800 && 'Muy Bueno'}
-              {creditResult.credit_score >= 700 && creditResult.credit_score < 750 && 'Bueno'}
-              {creditResult.credit_score >= 650 && creditResult.credit_score < 700 && 'Regular'}
-              {creditResult.credit_score < 650 && 'Necesita Mejora'}
+            <div className="text-3xl font-bold text-white mb-8">
+              {creditResult.credit_score >= 800 && '🌟 Excelente'}
+              {creditResult.credit_score >= 750 && creditResult.credit_score < 800 && '⭐ Muy Bueno'}
+              {creditResult.credit_score >= 700 && creditResult.credit_score < 750 && '✨ Bueno'}
+              {creditResult.credit_score >= 650 && creditResult.credit_score < 700 && '⚠️ Regular'}
+              {creditResult.credit_score < 650 && '❌ Necesita Mejora'}
             </div>
             
             {/* Score Bar */}
-            <div className="w-full max-w-md mx-auto">
-              <div className="bg-gray-700 rounded-full h-4 mb-2">
+            <div className="w-full max-w-2xl mx-auto">
+              <div className="bg-gradient-to-r from-gray-700 to-gray-800 rounded-full h-3 mb-4 border border-gray-600/50">
                 <div 
-                  className={`bg-gradient-to-r ${getScoreGradient(creditResult.credit_score)} h-4 rounded-full transition-all duration-1000`}
+                  className={`bg-gradient-to-r ${getScoreGradient(creditResult.credit_score)} h-3 rounded-full transition-all duration-1000 shadow-lg shadow-purple-500/50`}
                   style={{ width: `${((creditResult.credit_score - 500) / 350) * 100}%` }}
                 ></div>
               </div>
-              <div className="flex justify-between text-sm text-gray-400">
-                <span>500</span>
-                <span>850</span>
+              <div className="flex justify-between text-sm text-gray-400 px-2">
+                <span>500 (Bajo)</span>
+                <span>850 (Excelente)</span>
               </div>
             </div>
           </div>
 
           {/* Recommendation */}
-          <div className="bg-white/10 rounded-2xl p-6 text-center">
-            <p className="text-lg text-gray-300">{creditResult.recommendation}</p>
+          <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-2xl p-6 text-center border border-blue-500/20">
+            <p className="text-lg text-gray-200">💡 {creditResult.recommendation}</p>
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-2 gap-8 mb-8">
           {/* Score Factors */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-              <PieChart className="w-6 h-6 mr-3" />
+          <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-2xl p-8 border border-blue-500/20 backdrop-blur-sm">
+            <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+              <span className="text-3xl">📈</span>
               Factores del Score
             </h2>
             
-            <div className="space-y-4">
+            <div className="space-y-6">
               {Object.entries(creditResult.factors).map(([factor, value]) => (
-                <div key={factor} className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="text-blue-400">
-                      {getFactorIcon(factor)}
+                <div key={factor} className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <span className="text-2xl">{getFactorIcon(factor)}</span>
+                      <span className="text-white font-semibold">
+                        {getFactorLabel(factor)}
+                      </span>
                     </div>
-                    <span className="text-white font-medium">
-                      {getFactorLabel(factor)}
-                    </span>
+                    <span className="text-blue-400 font-bold text-lg">{value}%</span>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <div className="w-32 bg-gray-700 rounded-full h-2">
-                      <div 
-                        className="bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full"
-                        style={{ width: `${value}%` }}
-                      ></div>
-                    </div>
-                    <span className="text-white font-bold w-12 text-right">{value}%</span>
+                  <div className="w-full bg-gray-700/50 rounded-full h-2.5 border border-gray-600/30">
+                    <div 
+                      className="bg-gradient-to-r from-blue-500 to-cyan-500 h-2.5 rounded-full transition-all duration-500"
+                      style={{ width: `${value}%` }}
+                    ></div>
                   </div>
                 </div>
               ))}
@@ -259,18 +268,18 @@ const CreditProfile: React.FC<CreditProfileProps> = ({ incomeData, onRequestLoan
           </div>
 
           {/* Loan Options */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-              <DollarSign className="w-6 h-6 mr-3" />
+          <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-2xl p-8 border border-green-500/20 backdrop-blur-sm">
+            <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+              <span className="text-3xl">💰</span>
               Opciones de Préstamo
             </h2>
 
             {creditResult.loan_eligible ? (
               <>
                 {/* Loan Amount Selector */}
-                <div className="mb-6">
-                  <label className="block text-white font-medium mb-3">
-                    Monto del Préstamo: ${selectedAmount.toLocaleString()} USDC
+                <div className="mb-8">
+                  <label className="block text-white font-semibold mb-4 text-lg">
+                    Monto del Préstamo: <span className="text-green-400">${selectedAmount.toLocaleString()} USDC</span>
                   </label>
                   <input
                     type="range"
@@ -279,60 +288,74 @@ const CreditProfile: React.FC<CreditProfileProps> = ({ incomeData, onRequestLoan
                     step="50"
                     value={selectedAmount}
                     onChange={(e) => setSelectedAmount(parseInt(e.target.value))}
-                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                    className="w-full h-2 bg-gray-700/50 rounded-lg appearance-none cursor-pointer accent-green-500"
                   />
-                  <div className="flex justify-between text-sm text-gray-400 mt-1">
+                  <div className="flex justify-between text-sm text-gray-400 mt-2">
                     <span>$50</span>
                     <span>${creditResult.max_loan_amount.toLocaleString()}</span>
                   </div>
                 </div>
 
                 {/* Loan Details */}
-                <div className="space-y-4 mb-6">
-                  <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-                    <span className="text-gray-300">Tasa de Interés APR</span>
-                    <span className="text-green-400 font-bold">
+                <div className="space-y-3 mb-8">
+                  <div className="flex justify-between items-center p-4 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-xl border border-green-500/20">
+                    <span className="text-gray-300 font-medium">Tasa de Interés APR</span>
+                    <span className="text-green-400 font-bold text-lg">
                       {calculateInterestRate(creditResult.credit_score)}%
                     </span>
                   </div>
-                  <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-                    <span className="text-gray-300">Límite Máximo</span>
-                    <span className="text-blue-400 font-bold">
+                  <div className="flex justify-between items-center p-4 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-xl border border-blue-500/20">
+                    <span className="text-gray-300 font-medium">Límite Máximo</span>
+                    <span className="text-blue-400 font-bold text-lg">
                       ${creditResult.max_loan_amount.toLocaleString()} USDC
                     </span>
                   </div>
-                  <div className="flex justify-between items-center p-3 bg-white/10 rounded-lg">
-                    <span className="text-gray-300">Tiempo de Aprobación</span>
-                    <span className="text-purple-400 font-bold">≤ 5 minutos</span>
+                  <div className="flex justify-between items-center p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl border border-purple-500/20">
+                    <span className="text-gray-300 font-medium">Aprobación</span>
+                    <span className="text-purple-400 font-bold text-lg">≤ 5 minutos</span>
                   </div>
                 </div>
 
                 {/* Request Loan Button */}
                 <button
                   onClick={() => onRequestLoan(selectedAmount)}
-                  className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 hover:scale-105 flex items-center justify-center space-x-2"
+                  className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-green-500/50 transform hover:scale-105 flex items-center justify-center gap-2 text-lg"
                 >
-                  <DollarSign className="w-5 h-5" />
+                  <span>💳</span>
                   <span>Solicitar ${selectedAmount.toLocaleString()} USDC</span>
                   <ArrowRight className="w-5 h-5" />
                 </button>
               </>
             ) : (
               <div className="text-center">
-                <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-white mb-3">No Elegible</h3>
-                <p className="text-gray-300 mb-6">
+                <div className="text-6xl mb-4">🔒</div>
+                <h3 className="text-2xl font-bold text-white mb-3">No Elegible Aún</h3>
+                <p className="text-gray-300 mb-8">
                   Tu score actual ({creditResult.credit_score}) está por debajo del mínimo requerido (700).
                 </p>
                 
                 {/* Improvement Tips */}
-                <div className="bg-white/10 rounded-lg p-4 text-left">
-                  <h4 className="text-lg font-bold text-white mb-3">Para mejorar tu score:</h4>
-                  <ul className="space-y-2 text-sm text-gray-300">
-                    <li>• Aumenta tus ingresos mensuales promedio</li>
-                    <li>• Conecta más plataformas de trabajo</li>
-                    <li>• Mantén ingresos estables por más tiempo</li>
-                    <li>• Reduce tu ratio de deuda/ingreso</li>
+                <div className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-xl p-6 text-left border border-yellow-500/20">
+                  <h4 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <span>💡</span> Para mejorar tu score:
+                  </h4>
+                  <ul className="space-y-3 text-gray-300">
+                    <li className="flex gap-2">
+                      <span className="text-yellow-400">→</span>
+                      <span>Aumenta tus ingresos mensuales promedio</span>
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-yellow-400">→</span>
+                      <span>Conecta más plataformas de trabajo</span>
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-yellow-400">→</span>
+                      <span>Mantén ingresos estables por más tiempo</span>
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-yellow-400">→</span>
+                      <span>Reduce tu ratio de deuda/ingreso</span>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -341,12 +364,12 @@ const CreditProfile: React.FC<CreditProfileProps> = ({ incomeData, onRequestLoan
         </div>
 
         {/* Back Button */}
-        <div className="text-center mt-8">
+        <div className="text-center">
           <button
             onClick={onBack}
-            className="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg"
+            className="px-8 py-3 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white font-semibold rounded-lg transition-all duration-300"
           >
-            Volver a Configuración
+            ← Volver a Configuración
           </button>
         </div>
       </div>

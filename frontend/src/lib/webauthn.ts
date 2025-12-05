@@ -184,10 +184,19 @@ export async function startRegistration(
     );
     const publicKey = extractPublicKey(credential);
 
-    // NOTE: we no longer auto-persist credentials here. The caller (UI) should
-    // decide whether to store the credential locally or provide it via QR.
-    // This keeps credential handling explicit and allows presenting a QR for
-    // mobile storage instead of saving on the current device.
+    // ✅ GUARDAR EN LOCALSTORAGE DESPUÉS DEL REGISTRO
+    if (typeof window !== "undefined") {
+      const credentials = JSON.parse(localStorage.getItem("passkey-credentials") || "[]");
+      credentials.push({
+        credentialId,
+        username,
+        userId: bufferToBase64Url(userId),
+        publicKey: bufferToBase64Url(publicKey),
+        createdAt: new Date().toISOString(),
+      });
+      localStorage.setItem("passkey-credentials", JSON.stringify(credentials));
+      console.log("✅ Credencial registrada y guardada en localStorage");
+    }
 
     return {
       success: true,
@@ -225,7 +234,7 @@ export async function startAuthentication(): Promise<PasskeyResult> {
   try {
     const challenge = generateChallenge();
 
-    // Get stored credentials
+    // ✅ OBTENER CREDENCIALES DEL LOCALSTORAGE
     const storedCredentials =
       typeof window !== "undefined"
         ? JSON.parse(localStorage.getItem("passkey-credentials") || "[]")
@@ -274,10 +283,19 @@ export async function startAuthentication(): Promise<PasskeyResult> {
       ? bufferToBase64Url(new Uint8Array(response.userHandle))
       : undefined;
 
-    // Find the matching credential
+    // ✅ VERIFICAR QUE LA CREDENCIAL EXISTE EN LOCALSTORAGE
     const matchedCred = storedCredentials.find(
       (cred: { credentialId: string }) => cred.credentialId === credentialId
     );
+
+    if (!matchedCred) {
+      return {
+        success: false,
+        error: "Credential not found. Please register first.",
+      };
+    }
+
+    console.log("✅ Autenticación exitosa con credencial:", credentialId);
 
     return {
       success: true,

@@ -8,248 +8,236 @@ interface LandingPageProps {
 
 const LandingPage: React.FC<LandingPageProps> = ({ onStartSession }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-800 via-gray-900 to-black text-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 text-white overflow-hidden">
+      {/* Animated Background Spheres */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float"></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-blue-500 to-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" style={{animationDelay: '2s'}}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-pink-500 to-rose-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float" style={{animationDelay: '4s'}}></div>
+      </div>
+
       {/* Navigation Header */}
-      <nav className="relative z-10 px-6 pt-6">
-        <div className="mx-auto max-w-7xl flex items-center">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-green-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">🌐</span>
+      <nav className="relative z-20 px-6 pt-6 border-b border-white/5 backdrop-blur-sm">
+        <div className="mx-auto max-w-7xl flex items-center justify-between py-4">
+          <div className="flex items-center space-x-3 group">
+            <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center group-hover:shadow-lg group-hover:shadow-purple-500/50 transition-all">
+              <span className="text-white font-bold text-2xl">🏦</span>
             </div>
-            <span className="text-white font-bold text-xl">ComuChain</span>
+            <div className="flex flex-col">
+              <span className="text-white font-bold text-xl">EBAS</span>
+              <span className="text-xs text-purple-300">Sistema de Crédito</span>
+            </div>
           </div>
+          
+          <button
+            onClick={onStartSession}
+            className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/50"
+          >
+            Empezar
+          </button>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <div className="relative z-10 px-6 pt-20 pb-16">
+      <div className="relative z-10 px-6 pt-20 pb-32">
         <div className="mx-auto max-w-4xl text-center">
-          {/* Main Headline */}
-          <div className="mb-8">
-            <div className="text-6xl mb-4">🌟</div>
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-              Proyectos Comunitarios
-              <span className="block bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">
-                Transparencia y Progreso
-              </span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              Registra y gestiona proyectos comunitarios con transparencia, seguimiento en tiempo real y confianza en una plataforma descentralizada.
-            </p>
+          <div className="inline-block mb-6 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full">
+            <span className="text-purple-300 text-sm font-semibold">🚀 Plataforma de Crédito Blockchain</span>
           </div>
+          
+          <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400">
+              Acceso a Crédito
+            </span>
+            <br />
+            <span className="text-white">Seguro y Verificado</span>
+          </h1>
 
-          {/* Stats Row */}
-          <div className="grid grid-cols-3 gap-6 mb-12 max-w-2xl mx-auto">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-green-400 mb-1">100+</div>
-              <div className="text-sm text-gray-400">Proyectos Activos</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-blue-400 mb-1">$1M+</div>
-              <div className="text-sm text-gray-400">Fondos Recaudados</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-purple-400 mb-1">50+</div>
-              <div className="text-sm text-gray-400">Comunidades Participantes</div>
-            </div>
-          </div>
+          <p className="text-lg md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-12 font-light">
+            Obtén tu puntuación de crédito verificada con biometría y accede a fondos 
+            instantáneamente. Powered by <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">Stellar Blockchain</span>.
+          </p>
 
-          {/* CTA Button */}
-          <div className="mb-16">
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <button
               onClick={onStartSession}
-              className="group relative px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white text-lg font-semibold rounded-xl shadow-2xl hover:shadow-green-500/25 transition-all duration-300 hover:scale-105 hover:-translate-y-1"
+              className="group px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/50 transform hover:scale-105 text-lg flex items-center justify-center gap-2"
             >
-              <span className="relative z-10 flex items-center space-x-2">
-                <span>Registrar Proyecto</span>
-                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
+              Crear Cuenta
+              <span className="group-hover:translate-x-1 transition-transform">→</span>
             </button>
-            <p className="text-sm text-gray-400 mt-3">✓ Transparencia ✓ Seguimiento en tiempo real</p>
+            
+            <button
+              onClick={onStartSession}
+              className="px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold rounded-xl transition-all duration-300 hover:shadow-lg text-lg backdrop-blur-sm"
+            >
+              Aprende Más
+            </button>
           </div>
-        </div>
-      </div>
 
-      {/* Features Section */}
-      <div className="relative z-10 px-6 pb-20">
-        <div className="mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Feature 1 */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:bg-white/15 transition-all duration-300 group">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-white mb-4">Transparencia Total</h3>
-              <p className="text-gray-300 leading-relaxed">
-                Todos los proyectos son verificados y auditados en tiempo real. 
-                Accede a informes detallados y métricas de impacto social.
-              </p>
+          {/* Trust Indicators */}
+          <div className="flex flex-col sm:flex-row gap-8 justify-center text-center">
+            <div className="flex flex-col items-center">
+              <div className="text-4xl mb-3">✓</div>
+              <p className="text-gray-300 font-medium">Sin Contraseñas</p>
+              <p className="text-xs text-gray-500">Biometría segura</p>
             </div>
-
-            {/* Feature 2 */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:bg-white/15 transition-all duration-300 group">
-              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-white mb-4">Financiamiento Colectivo</h3>
-              <p className="text-gray-300 leading-relaxed">
-                Contribuye y recibe fondos de una comunidad global. 
-                Opciones de financiamiento flexibles y accesibles para todos.
-              </p>
+            <div className="flex flex-col items-center">
+              <div className="text-4xl mb-3">⚡</div>
+              <p className="text-gray-300 font-medium">Instantáneo</p>
+              <p className="text-xs text-gray-500">Decisión en segundos</p>
             </div>
-
-            {/* Feature 3 */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:bg-white/15 transition-all duration-300 group">
-              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-white mb-4">Seguridad y Confianza</h3>
-              <p className="text-gray-300 leading-relaxed">
-                Protege tus datos y transacciones con tecnología de encriptación avanzada. 
-                Tu privacidad es nuestra prioridad.
-              </p>
+            <div className="flex flex-col items-center">
+              <div className="text-4xl mb-3">🌍</div>
+              <p className="text-gray-300 font-medium">Blockchain</p>
+              <p className="text-xs text-gray-500">Transacciones verificadas</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* How It Works Section */}
-      <div className="relative z-10 px-6 pb-20">
+      <div className="relative z-10 px-6 py-20 bg-gradient-to-b from-purple-500/5 to-transparent border-y border-white/5">
         <div className="mx-auto max-w-6xl">
-          <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-16">
-            ¿Cómo Funciona? <span className="text-green-400">Solo 3 Pasos</span>
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 text-white">
+            ¿Cómo Funciona?
           </h2>
+          <p className="text-center text-gray-400 mb-16 text-lg">3 pasos para acceder a crédito verificado</p>
           
           <div className="grid md:grid-cols-3 gap-8">
             {/* Step 1 */}
-            <div className="relative text-center">
-              <div className="bg-gradient-to-r from-blue-500 to-cyan-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-white font-bold text-xl">1</span>
+            <div className="group relative">
+              <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-xl p-8 border border-purple-500/20 hover:border-purple-500/50 transition-all min-h-fit">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center mb-6 group-hover:shadow-lg group-hover:shadow-purple-500/50 transition-all">
+                  <span className="text-2xl font-bold">1</span>
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">Registro Seguro</h3>
+                <p className="text-gray-400">
+                  Crea tu cuenta usando biometría con WebAuthn. Tus datos nunca salen de tu dispositivo.
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-white mb-4">Conecta tus Apps</h3>
-              <p className="text-gray-300 leading-relaxed">
-                Conecta Uber, Rappi, DiDi, Deliveroo y otras apps de trabajo. 
-                Analizamos tus ingresos de los últimos 6 meses de forma segura.
-              </p>
-              <div className="absolute -right-4 top-8 hidden md:block">
-                <svg className="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="absolute -right-4 top-12 hidden md:block text-purple-500/40">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </div>
             </div>
 
             {/* Step 2 */}
-            <div className="relative text-center">
-              <div className="bg-gradient-to-r from-purple-500 to-pink-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-white font-bold text-xl">2</span>
+            <div className="group relative">
+              <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-xl p-8 border border-blue-500/20 hover:border-blue-500/50 transition-all min-h-fit">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center mb-6 group-hover:shadow-lg group-hover:shadow-blue-500/50 transition-all">
+                  <span className="text-2xl font-bold">2</span>
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">Puntuación Rápida</h3>
+                <p className="text-gray-400">
+                  Nuestro algoritmo calcula tu score de crédito al instante basado en datos verificados.
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-white mb-4">Obtén tu Score</h3>
-              <p className="text-gray-300 leading-relaxed">
-                Nuestro algoritmo calcula tu credit score en tiempo real basado en 
-                estabilidad de ingresos, diversidad de plataformas y experiencia.
-              </p>
-              <div className="absolute -right-4 top-8 hidden md:block">
-                <svg className="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="absolute -right-4 top-12 hidden md:block text-blue-500/40">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </div>
             </div>
 
             {/* Step 3 */}
-            <div className="text-center">
-              <div className="bg-gradient-to-r from-green-500 to-emerald-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span className="text-white font-bold text-xl">3</span>
-              </div>
-              <h3 className="text-xl font-bold text-white mb-4">Recibe tu USDC</h3>
-              <p className="text-gray-300 leading-relaxed">
-                Si calificas (score ≥700), recibe el préstamo instantáneamente en tu wallet. 
-                Tasas desde 6% APR según tu perfil crediticio.
-              </p>
-            </div>
-          </div>
-          
-          {/* Supported Platforms */}
-          <div className="mt-16 text-center">
-            <h3 className="text-lg font-semibold text-gray-300 mb-8">Plataformas Soportadas</h3>
-            <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
-              <div className="bg-white/10 px-4 py-2 rounded-lg">
-                <span className="text-white font-medium">🚗 Uber</span>
-              </div>
-              <div className="bg-white/10 px-4 py-2 rounded-lg">
-                <span className="text-white font-medium">🍕 Rappi</span>
-              </div>
-              <div className="bg-white/10 px-4 py-2 rounded-lg">
-                <span className="text-white font-medium">🚙 DiDi</span>
-              </div>
-              <div className="bg-white/10 px-4 py-2 rounded-lg">
-                <span className="text-white font-medium">🛵 Deliveroo</span>
-              </div>
-              <div className="bg-white/10 px-4 py-2 rounded-lg">
-                <span className="text-white font-medium">💼 Freelancer</span>
-              </div>
-              <div className="bg-white/10 px-4 py-2 rounded-lg">
-                <span className="text-white font-medium">🎨 Fiverr</span>
+            <div className="group">
+              <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-xl p-8 border border-green-500/20 hover:border-green-500/50 transition-all min-h-fit">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl flex items-center justify-center mb-6 group-hover:shadow-lg group-hover:shadow-green-500/50 transition-all">
+                  <span className="text-2xl font-bold">3</span>
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">Fondos Instantáneos</h3>
+                <p className="text-gray-400">
+                  Recibe USDC en tu wallet. Desde 6% APR. Sin intermediarios ni retrasos.
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Technology Section */}
-      <div className="relative z-10 px-6 pb-20">
-        <div className="mx-auto max-w-4xl text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-12">
-            Powered by <span className="text-purple-400">Cutting-Edge Technology</span>
+      {/* Features Grid */}
+      <div className="relative z-10 px-6 py-20">
+        <div className="mx-auto max-w-6xl">
+          <h2 className="text-4xl font-bold text-center mb-4 text-white">
+            Características Principales
           </h2>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {/* Tech Icons */}
-            <div className="flex flex-col items-center space-y-3 group">
-              <div className="w-16 h-16 bg-white/10 rounded-xl flex items-center justify-center group-hover:bg-white/20 transition-all">
-                <span className="text-2xl">🌐</span>
+          <p className="text-center text-gray-400 mb-16 text-lg">Una plataforma pensada para tu seguridad</p>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { icon: "🔑", title: "WebAuthn", desc: "Autenticación biométrica" },
+              { icon: "📊", title: "Scoring", desc: "Puntuación instantánea" },
+              { icon: "🔐", title: "Blockchain", desc: "Encriptación en red" },
+              { icon: "⚡", title: "Rápido", desc: "Respuesta en segundos" },
+              { icon: "🌐", title: "Global", desc: "Accesible desde cualquier lugar" },
+              { icon: "💰", title: "USDC", desc: "Stablecoin en Stellar" },
+              { icon: "📱", title: "Mobile", desc: "Completamente responsive" },
+              { icon: "✓", title: "Verificado", desc: "Datos auditados" },
+            ].map((feature, i) => (
+              <div 
+                key={i} 
+                className="group bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-xl p-6 border border-purple-500/20 hover:border-purple-500/50 transition-all hover:shadow-lg hover:shadow-purple-500/20"
+              >
+                <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">{feature.icon}</div>
+                <h3 className="font-bold text-white mb-1">{feature.title}</h3>
+                <p className="text-sm text-gray-400 group-hover:text-gray-300">{feature.desc}</p>
               </div>
-              <span className="text-gray-300 font-medium">WebAuthn</span>
-            </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Tech Stack Section */}
+      <div className="relative z-10 px-6 py-20">
+        <div className="mx-auto max-w-4xl">
+          <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl p-8 border border-blue-500/20">
+            <h2 className="text-3xl font-bold text-white mb-8 text-center">Tecnología Blockchain</h2>
             
-            <div className="flex flex-col items-center space-y-3 group">
-              <div className="w-16 h-16 bg-white/10 rounded-xl flex items-center justify-center group-hover:bg-white/20 transition-all">
-                <span className="text-2xl">⭐</span>
-              </div>
-              <span className="text-gray-300 font-medium">Stellar</span>
-            </div>
-            
-            <div className="flex flex-col items-center space-y-3 group">
-              <div className="w-16 h-16 bg-white/10 rounded-xl flex items-center justify-center group-hover:bg-white/20 transition-all">
-                <span className="text-2xl">🚀</span>
-              </div>
-              <span className="text-gray-300 font-medium">Soroban</span>
-            </div>
-            
-            <div className="flex flex-col items-center space-y-3 group">
-              <div className="w-16 h-16 bg-white/10 rounded-xl flex items-center justify-center group-hover:bg-white/20 transition-all">
-                <span className="text-2xl">🔒</span>
-              </div>
-              <span className="text-gray-300 font-medium">Biometric</span>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {[
+                { icon: "⭐", name: "Stellar", desc: "Red de pagos" },
+                { icon: "🚀", name: "Soroban", desc: "Smart Contracts" },
+                { icon: "🔐", name: "WebAuthn", desc: "Biometría" },
+                { icon: "💳", name: "USDC", desc: "Moneda estable" },
+              ].map((tech, i) => (
+                <div key={i} className="flex flex-col items-center text-center group">
+                  <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">{tech.icon}</div>
+                  <h3 className="font-bold text-white">{tech.name}</h3>
+                  <p className="text-xs text-gray-400 mt-1">{tech.desc}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Background Decorations */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-pulse delay-500"></div>
+      {/* CTA Section */}
+      <div className="relative z-10 px-6 py-20 text-center">
+        <div className="inline-block mb-6 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full">
+          <span className="text-purple-300 text-sm font-semibold">¿Listo para comenzar?</span>
+        </div>
+        <h2 className="text-4xl font-bold text-white mb-6">Accede a Crédito Verificado Hoy</h2>
+        <p className="text-gray-400 mb-8 text-lg max-w-2xl mx-auto">
+          Crea tu cuenta en segundos y obtén acceso a fondos instantáneamente
+        </p>
+        <button
+          onClick={onStartSession}
+          className="inline-block px-10 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/50 transform hover:scale-105 text-lg"
+        >
+          Empezar Ahora
+        </button>
       </div>
+
+      {/* Footer */}
+      <footer className="relative z-10 border-t border-white/5 px-6 py-8">
+        <div className="mx-auto max-w-7xl text-center text-gray-500 text-sm">
+          <p>© 2024 EBAS Credit Score. Impulsado por Stellar y WebAuthn.</p>
+          <p className="mt-2 text-xs text-gray-600">Transacciones seguras y verificadas en blockchain</p>
+        </div>
+      </footer>
     </div>
   );
 };

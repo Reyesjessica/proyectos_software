@@ -8,9 +8,6 @@ import { usePasskey } from "@/hooks/usePasskey";
 export function PasskeyAuth() {
   const [username, setUsername] = useState("");
   const [status, setStatus] = useState<string>("");
-  const [showQR, setShowQR] = useState(false);
-  const [qrPayload, setQrPayload] = useState<string | null>(null);
-  const [deliveryMethod, setDeliveryMethod] = useState<"qr" | "device">("qr");
   const router = useRouter();
   
   // Use REAL Passkey hook (WebAuthn)
@@ -35,63 +32,23 @@ export function PasskeyAuth() {
         return;
       }
 
-      if (deliveryMethod === "device") {
-        // Persist credential on this device and create session
-        setStatus("✅ Passkey creado! Guardando en este dispositivo...");
-
-        try {
-          await SessionManager.createSession(
-            normalizedUsername,
-            result.credentialId!,
-            `${normalizedUsername}@ebas.demo`
-          );
-
-          setStatus(`✅ Registrado y conectado como ${normalizedUsername}`);
-          setTimeout(() => router.push('/dashboard'), 800);
-          return;
-        } catch (e) {
-          console.error('Error creating session after local save', e);
-          setStatus('❌ Error guardando la sesión localmente');
-          return;
-        }
-      }
-
-      // Otherwise deliver via QR for mobile storage
-      setStatus("✅ Passkey creado! Generando QR para transferencia a móvil...");
+      // Persist credential on this device and create session
+      setStatus("✅ Passkey creado! Guardando en este dispositivo...");
 
       try {
-        // Generate a wallet keypair without persisting locally
-        // @ts-ignore - dynamic import of SessionManager helper
-        const { generateWalletNoPersist } = await import("@/lib/session");
-        const wallet = generateWalletNoPersist(normalizedUsername);
+        await SessionManager.createSession(
+          normalizedUsername,
+          result.credentialId!,
+          `${normalizedUsername}@ebas.demo`
+        );
 
-        const payload = {
-          username: normalizedUsername,
-          credentialId: result.credentialId,
-          // publicKey is a Uint8Array; serialize as base64 for QR transfer
-          publicKey: result.publicKey ? btoa(String.fromCharCode(...Array.from(result.publicKey))) : undefined,
-          walletAddress: wallet.publicKey,
-          generatedAt: new Date().toISOString(),
-        };
-
-        const payloadStr = JSON.stringify(payload);
-
-        // Try to generate QR locally (preferred) using the lightweight 'qrcode' lib.
-        // This avoids external API failures and URL length limits.
-        try {
-          const QRCode = await import('qrcode');
-          const dataUrl = await QRCode.toDataURL(payloadStr, { width: 400 });
-          setQrPayload(dataUrl);
-        } catch (e) {
-          // Fallback to public QR generator if the package isn't installed or fails
-          const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(payloadStr)}`;
-          setQrPayload(qrUrl);
-        }
-        setShowQR(true);
-        setStatus("🔎 Escanea el QR con tu teléfono para guardar la credencial allí.");
+        setStatus(`✅ Registrado y conectado como ${normalizedUsername}`);
+        setTimeout(() => router.push('/dashboard'), 800);
+        return;
       } catch (e) {
-        console.error('Error generating QR payload', e);
-        setStatus('❌ Error generando QR');
+        console.error('Error creating session after local save', e);
+        setStatus('❌ Error guardando la sesión localmente');
+        return;
       }
       
     } catch (err) {
@@ -170,18 +127,18 @@ export function PasskeyAuth() {
 
   if (!isSupported) {
     return (
-      <div className="glass rounded-2xl p-8">
+      <div className="bg-gradient-to-br from-red-500/10 to-orange-500/10 rounded-2xl p-8 border border-red-500/20 backdrop-blur-sm">
         <div className="text-center">
-          <div className="text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">
-            Passkeys Not Supported
+          <div className="text-6xl mb-4 inline-block">⚠️</div>
+          <h2 className="text-2xl font-bold mb-4 text-white">
+            Passkeys No Soportados
           </h2>
-          <p className="text-gray-600 dark:text-gray-300">
-            Your browser doesn't support WebAuthn/Passkeys. Please use a modern
-            browser like Chrome, Safari, or Edge.
+          <p className="text-gray-300 mb-3">
+            Tu navegador no soporta WebAuthn/Passkeys. Por favor usa un navegador moderno
+            como Chrome, Safari, o Edge.
           </p>
-          <p className="text-sm text-gray-500 mt-4">
-            Also ensure you're using HTTPS in production.
+          <p className="text-sm text-gray-400">
+            En producción, asegúrate de usar HTTPS.
           </p>
         </div>
       </div>
@@ -189,13 +146,17 @@ export function PasskeyAuth() {
   }
 
   return (
-    <div className="glass rounded-2xl p-8 space-y-6">
-      <div className="text-center mb-6">
-        <h2 className="text-3xl font-bold mb-2 text-gray-800 dark:text-white">
-          Prueba el sistema
+    <div className="bg-gradient-to-br from-purple-500/5 via-pink-500/5 to-transparent rounded-2xl p-8 space-y-6 border border-purple-500/20 backdrop-blur-sm">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <div className="inline-block mb-4 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full">
+          <span className="text-purple-300 text-sm font-semibold">🔐 Autenticación Segura</span>
+        </div>
+        <h2 className="text-3xl font-bold mb-2 text-white">
+          Acceso con Passkey
         </h2>
-        <p className="text-gray-600 dark:text-gray-300">
-          Crea o inicia sesión con tu Passkey
+        <p className="text-gray-400">
+          Usa tu biometría para autenticarte de forma segura
         </p>
       </div>
 
@@ -203,79 +164,39 @@ export function PasskeyAuth() {
       <div>
         <label
           htmlFor="username"
-          className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300"
+          className="block text-sm font-semibold mb-3 text-gray-300"
         >
-          Usuario
+          Nombre de Usuario
         </label>
-        <input
-          id="username"
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Escribe tu usuario"
-          className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-          disabled={isLoading}
-        />
-      </div>
-
-      {/* Método de entrega */}
-      <div className="pt-4">
-        <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-          ¿Cómo quieres recibir la Passkey?
-        </label>
-        <div className="flex items-center gap-4">
-          <label className="inline-flex items-center gap-2">
-            <input
-              type="radio"
-              name="delivery"
-              value="qr"
-              checked={deliveryMethod === "qr"}
-              onChange={() => setDeliveryMethod("qr")}
-              className="form-radio text-purple-600"
-            />
-            <span className="text-sm">Por QR (escanea en tu teléfono)</span>
-          </label>
-          <label className="inline-flex items-center gap-2">
-            <input
-              type="radio"
-              name="delivery"
-              value="device"
-              checked={deliveryMethod === "device"}
-              onChange={() => setDeliveryMethod("device")}
-              className="form-radio text-purple-600"
-            />
-            <span className="text-sm">Guardar en este equipo</span>
-          </label>
+        <div className="relative">
+          <input
+            id="username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Tu nombre de usuario"
+            className="w-full px-4 py-3 rounded-lg border border-purple-500/20 bg-purple-500/5 text-white placeholder-gray-500 focus:border-purple-500/50 focus:bg-purple-500/10 focus:outline-none transition-all focus:ring-2 focus:ring-purple-500/20"
+            disabled={isLoading}
+          />
+          <span className="absolute right-3 top-3 text-xl">👤</span>
         </div>
       </div>
 
       {/* Botones de acción */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
         <button
           onClick={handleRegister}
           disabled={isLoading || !username.trim()}
-          className="px-6 py-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+          className="group px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 disabled:from-gray-600 disabled:to-gray-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:shadow-purple-500/50 transform hover:scale-105 disabled:scale-100 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {isLoading ? (
             <>
               <Spinner />
-              <span>Procesando...</span>
+              <span>Creando...</span>
             </>
           ) : (
             <>
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
+              <span className="text-lg">🆕</span>
               <span>Crear Passkey</span>
             </>
           )}
@@ -284,73 +205,60 @@ export function PasskeyAuth() {
         <button
           onClick={handleAuthenticate}
           disabled={isLoading}
-          className="px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+          className="group px-6 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 disabled:from-gray-600 disabled:to-gray-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl hover:shadow-blue-500/50 transform hover:scale-105 disabled:scale-100 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {isLoading ? (
             <>
               <Spinner />
-              <span>Procesando...</span>
+              <span>Autenticando...</span>
             </>
           ) : (
             <>
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
-                />
-              </svg>
+              <span className="text-lg">🔓</span>
               <span>Autenticar</span>
             </>
           )}
         </button>
       </div>
 
-      {/* QR preview (cuando se genera) */}
-      {showQR && qrPayload && (
-        <div className="mt-4 p-4 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-center space-y-3">
-          <p className="text-sm mb-2">Escanea este código con la cámara o app de tu teléfono:</p>
-          <img src={qrPayload} alt="QR de transferencia de passkey" className="mx-auto w-56 h-56 rounded-md shadow" />
-
-          {/* (JSON raw removed per user request) */}
-
-          <div className="mt-3 flex justify-center gap-3">
-            <button
-              onClick={() => {
-                setShowQR(false);
-                setQrPayload(null);
-              }}
-              className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md text-sm"
-            >Cerrar</button>
-          </div>
-        </div>
-      )}
-
       {/* Mensaje de estado */}
       {(status || error) && (
         <div
-          className={`p-4 rounded-lg ${
+          className={`p-4 rounded-xl border backdrop-blur-sm transition-all ${
             error
-              ? "bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800"
+              ? "bg-red-500/10 text-red-200 border-red-500/30"
               : status.includes("✅")
-              ? "bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200 border border-green-200 dark:border-green-800"
-              : "bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 border border-blue-200 dark:border-blue-800"
+              ? "bg-green-500/10 text-green-200 border-green-500/30"
+              : "bg-blue-500/10 text-blue-200 border-blue-500/30"
           }`}
         >
-          <p className="text-sm font-medium break-words">{error || status}</p>
+          <p className="text-sm font-medium break-words flex items-center gap-2">
+            <span>{error?.charAt(0) === '❌' ? '❌' : status?.charAt(0) || 'ℹ'}</span>
+            <span>{error || status}</span>
+          </p>
         </div>
       )}
 
-      {/* Info del navegador */}
-      <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-        <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-          🔒 Tus datos biométricos nunca salen de tu dispositivo
+      {/* Características */}
+      <div className="grid grid-cols-3 gap-3 pt-4 border-t border-purple-500/10">
+        <div className="text-center">
+          <div className="text-2xl mb-1">🔒</div>
+          <p className="text-xs text-gray-400">Encriptado</p>
+        </div>
+        <div className="text-center">
+          <div className="text-2xl mb-1">⚡</div>
+          <p className="text-xs text-gray-400">Instantáneo</p>
+        </div>
+        <div className="text-center">
+          <div className="text-2xl mb-1">📱</div>
+          <p className="text-xs text-gray-400">Local</p>
+        </div>
+      </div>
+
+      {/* Info de seguridad */}
+      <div className="bg-blue-500/5 rounded-lg p-3 border border-blue-500/20">
+        <p className="text-xs text-blue-300 text-center">
+          ✓ Tus datos biométricos nunca salen de tu dispositivo
         </p>
       </div>
     </div>
