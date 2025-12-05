@@ -184,7 +184,7 @@ function DashboardContent() {
                 onClick={connectMetaMask}
                 className="px-6 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/50"
               >
-                {walletAddress.length > 0 ? `Connected: ${walletAddress}` : "🏦 Wallet"}
+                {walletAddress.length > 0 ? `Connected: ${walletAddress.substring(0, 6)}...${walletAddress.substring(walletAddress.length - 4)}` : "Connect Wallet"}
               </button>
               <button
                 onClick={handleLogout}
