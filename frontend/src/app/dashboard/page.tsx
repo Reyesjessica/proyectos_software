@@ -315,6 +315,8 @@ export default function Dashboard() {
   const [fundingModalOpen, setFundingModalOpen] = useState(false);
   const [viewProject, setViewProject] = useState<any>(null); // State for Project Details Modal
   const [selectedProjectForFunding, setSelectedProjectForFunding] = useState<{ name: string, budget: string, progress: string, description?: string, location?: string } | null>(null);
+  const [showQrModal, setShowQrModal] = useState(false);
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
 
   // Stats
   const totalBudget = projects.reduce((acc, curr) => {
@@ -791,25 +793,13 @@ export default function Dashboard() {
       return;
     }
     try {
-      // @ts-ignore
+      // @ts-ignore - Dynamic import for qrcode library
       const QRCode = (await import('qrcode')).default;
-      QRCode.toDataURL(addr, { width: 400, margin: 2 })
-        .then((url: string) => {
-          const win = window.open("", "QR", "width=450,height=550");
-          if (win) {
-            win.document.write(`
-              <div style="font-family:sans-serif;text-align:center;padding:20px;background:#f8fafc;height:100%;">
-                <h2 style="color:#0f172a;margin-bottom:20px;">Tu Dirección Pública</h2>
-                <div style="background:white;padding:15px;border-radius:12px;box-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1);display:inline-block;">
-                  <img src="${url}" style="display:block;"/>
-                </div>
-                <p style="margin-top:20px;background:#e2e8f0;padding:10px;border-radius:8px;font-family:monospace;font-size:12px;word-break:break-all;color:#334155;">${addr}</p>
-                <div style="margin-top:20px;color:#059669;font-weight:bold;font-size:14px;">Red: Stellar Testnet</div>
-              </div>
-            `);
-          }
-        });
+      const url = await QRCode.toDataURL(addr, { width: 400, margin: 2 });
+      setQrCodeDataUrl(url);
+      setShowQrModal(true);
     } catch (e) {
+      console.error("QR Code generation error:", e);
       alert("Error generando QR. Verifica tu conexión.");
     }
   };
@@ -1314,6 +1304,45 @@ export default function Dashboard() {
           onClose={() => setViewProject(null)}
           project={viewProject}
         />
+
+        {/* QR CODE MODAL */}
+        {showQrModal && qrCodeDataUrl && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden border border-slate-200">
+              <div className="p-6 bg-slate-900 text-white flex justify-between items-center">
+                <h3 className="text-xl font-bold flex items-center gap-2">
+                  <span>📱</span> Tu Dirección Pública
+                </h3>
+                <button
+                  onClick={() => { setShowQrModal(false); setQrCodeDataUrl(null); }}
+                  className="text-slate-400 hover:text-white transition-colors text-xl"
+                >
+                  ✕
+                </button>
+              </div>
+              <div className="p-6 flex flex-col items-center">
+                <div className="bg-white p-4 rounded-2xl shadow-lg border border-slate-100 mb-4">
+                  <img src={qrCodeDataUrl} alt="QR Code" className="block" />
+                </div>
+                <p className="text-xs font-mono bg-slate-100 p-3 rounded-lg text-slate-600 break-all text-center w-full">
+                  {walletAddress || session?.user?.walletAddress}
+                </p>
+                <div className="mt-4 text-emerald-600 font-bold text-sm flex items-center gap-2">
+                  <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                  Red: Stellar Testnet
+                </div>
+              </div>
+              <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-center">
+                <button
+                  onClick={() => { setShowQrModal(false); setQrCodeDataUrl(null); }}
+                  className="px-6 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-lg transition-colors"
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
