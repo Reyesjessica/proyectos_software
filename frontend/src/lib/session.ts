@@ -6,7 +6,6 @@
 'use client';
 
 import { UserSession } from '@/types/session';
-import { Keypair } from '@stellar/stellar-sdk';
 
 const SESSION_KEY = 'ebas-session';
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
@@ -44,6 +43,7 @@ async function generateStellarWallet(): Promise<string> {
  * Retorna la dirección pública (wallet) y guarda la clave privada cifrada
  */
 export async function generateAndPersistWallet(username: string): Promise<{ publicKey: string; secret: string }> {
+  const { Keypair } = await import('@stellar/stellar-sdk');
   const keypair = Keypair.random();
   // Cifrado simple para demo (en producción usar Web Crypto API)
   const walletData = {
@@ -63,7 +63,8 @@ export async function generateAndPersistWallet(username: string): Promise<{ publ
  * Useful when the UI wants to provide key data to another device (QR) before
  * deciding whether to persist locally.
  */
-export function generateWalletNoPersist(username?: string): { publicKey: string; secret: string } {
+export async function generateWalletNoPersist(username?: string): Promise<{ publicKey: string; secret: string }> {
+  const { Keypair } = await import('@stellar/stellar-sdk');
   const keypair = Keypair.random();
   return { publicKey: keypair.publicKey(), secret: keypair.secret() };
 }
@@ -125,14 +126,27 @@ export class SessionManager {
   static async createSession(
     username: string,
     credentialId: string,
-    email?: string
+    email?: string,
+    role?: string
   ): Promise<UserSession> {
-    // Recuperar o generar wallet Ed25519 para el usuario
+    // DEMO: Hardcode addresses to match User's Freighter Accounts for specific roles
+    // Generate/Recover local wallet ALWAYS to ensure we have keys for background ops
     let walletData = getWalletForUser(username);
     if (!walletData) {
       walletData = await generateAndPersistWallet(username);
     }
-    const walletAddress = walletData.publicKey;
+
+    // Default wallet address is the generated one
+    let walletAddress = walletData.publicKey;
+
+    // OVERRIDE for Demo Roles (Display purposes mainly)
+    if (role === 'official') {
+      // User provided Account 1
+      walletAddress = 'GCNHHMQFE25JFCKXNMFDFBPS7ZUM6I55PDVY2SJIS3WQSIBXRNHUV6BM';
+    } else if (role === 'community') {
+      // User provided Account 2
+      walletAddress = 'GBX3V42YPENDW7SHBRGEOXDRJAVIINXYUCW6A3EESZANRAYVWV5LD2UC';
+    }
 
     // Guardar credencial en array localStorage
     if (typeof window !== 'undefined') {
@@ -146,11 +160,13 @@ export class SessionManager {
         credentials[credIndex].credentialId = credentialId;
         credentials[credIndex].walletAddress = walletAddress;
         credentials[credIndex].email = email;
+        credentials[credIndex].role = role;
       } else {
         credentials.push({
           username,
           credentialId,
           email,
+          role,
           walletAddress
         });
       }
@@ -163,6 +179,7 @@ export class SessionManager {
         id: crypto.randomUUID(),
         username,
         email,
+        role,
         walletAddress,
         credentialId
       },
@@ -195,7 +212,7 @@ export class SessionManager {
       if (!sessionData) return null;
 
       const session: UserSession = JSON.parse(sessionData);
-      
+
       // Check if session has expired
       if (new Date(session.expiresAt) < new Date()) {
         console.log('⏰ Session expired, clearing...');
@@ -252,7 +269,7 @@ export class SessionManager {
     if (!session) return;
 
     session.passkey.lastVerified = new Date().toISOString();
-    
+
     if (typeof window !== 'undefined') {
       localStorage.setItem(SESSION_KEY, JSON.stringify(session));
       console.log('🔄 Updated last verification time');

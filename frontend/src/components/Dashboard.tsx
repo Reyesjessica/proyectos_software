@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 
 interface PasskeyData {
   credentialId: string;
@@ -26,7 +25,8 @@ const Dashboard: React.FC<DashboardProps> = ({ passkeyData, onLogout, onAuthenti
     setTimeout(() => setCopied(null), 2000);
   };
 
-  const shortenString = (str: string, length: number = 20) => {
+  const shortenString = (str?: string, length: number = 20) => {
+    if (!str) return '';
     if (str.length <= length) return str;
     return `${str.slice(0, length / 2)}...${str.slice(-length / 2)}`;
   };
@@ -45,13 +45,13 @@ const Dashboard: React.FC<DashboardProps> = ({ passkeyData, onLogout, onAuthenti
               <p className="text-gray-400 text-sm">Credit Scoring Platform</p>
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-lg px-4 py-2 backdrop-blur-sm border border-green-500/30">
               <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
               <span className="text-green-300 text-sm font-semibold">Conectado</span>
             </div>
-            
+
             <button
               onClick={onLogout}
               className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-300 hover:text-red-200 rounded-lg backdrop-blur-sm border border-red-500/30 transition-all duration-200 flex items-center space-x-2 hover:shadow-lg hover:shadow-red-500/20"
@@ -68,7 +68,7 @@ const Dashboard: React.FC<DashboardProps> = ({ passkeyData, onLogout, onAuthenti
       {/* Main Content */}
       <div className="relative z-10 px-6 pt-8 pb-16">
         <div className="mx-auto max-w-7xl">
-          {/* Welcome Section with Hero Image */}
+          {/* Welcome Section */}
           <div className="mb-12 grid lg:grid-cols-2 gap-8 items-center">
             <div>
               <h1 className="text-5xl font-bold text-white mb-4">
@@ -78,7 +78,7 @@ const Dashboard: React.FC<DashboardProps> = ({ passkeyData, onLogout, onAuthenti
                 </span>
               </h1>
               <p className="text-gray-300 text-lg mb-6">
-                Tu cuenta está protegida con <span className="text-green-400 font-semibold">autenticación biométrica segura</span>. 
+                Tu cuenta está protegida con <span className="text-green-400 font-semibold">autenticación biométrica segura</span>.
                 Accede a préstamos instantáneos sin complicaciones.
               </p>
               <div className="flex flex-wrap gap-3">
@@ -96,7 +96,7 @@ const Dashboard: React.FC<DashboardProps> = ({ passkeyData, onLogout, onAuthenti
                 </div>
               </div>
             </div>
-            
+
             {/* Hero Illustration */}
             <div className="relative h-80 rounded-2xl overflow-hidden bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-white/10 flex items-center justify-center">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-transparent"></div>
@@ -147,26 +147,6 @@ const Dashboard: React.FC<DashboardProps> = ({ passkeyData, onLogout, onAuthenti
                 </div>
                 <div>
                   <h3 className="text-white font-bold text-lg">Red</h3>
-                  <p className="text-purple-400 text-sm">Stellar</p>
-                </div>
-              </div>
-            </div>
-          </div>
-                  <h3 className="text-white font-semibold">Seguridad</h3>
-                  <p className="text-blue-400 text-sm">Biométrica</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center">
-                  <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="text-white font-semibold">Red</h3>
                   <p className="text-purple-400 text-sm">Stellar</p>
                 </div>
               </div>
@@ -277,7 +257,7 @@ const Dashboard: React.FC<DashboardProps> = ({ passkeyData, onLogout, onAuthenti
                 <span>Inicio Rápido</span>
               </h2>
 
-              <div className="space-y-4"
+              <div className="space-y-4">
                 {/* Authenticate Button */}
                 {onAuthenticate && (
                   <button
@@ -343,7 +323,7 @@ const Dashboard: React.FC<DashboardProps> = ({ passkeyData, onLogout, onAuthenti
                 </div>
 
                 {/* EBAS Button */}
-                <a 
+                <a
                   href="/ebas-dashboard"
                   className="block w-full mt-6 group relative overflow-hidden bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-xl p-6 text-center transform transition-all hover:scale-105 shadow-lg hover:shadow-pink-500/40 border border-white/20"
                 >

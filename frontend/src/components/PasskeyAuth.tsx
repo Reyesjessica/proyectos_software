@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { SessionManager } from "@/lib/session";
 import { usePasskey } from "@/hooks/usePasskey";
 
@@ -9,7 +9,9 @@ export function PasskeyAuth() {
   const [username, setUsername] = useState("");
   const [status, setStatus] = useState<string>("");
   const router = useRouter();
-  
+  const searchParams = useSearchParams();
+  const role = searchParams.get('role');
+
   // Use REAL Passkey hook (WebAuthn)
   const { isSupported, isLoading, error, createPasskey, authenticate, clearError } = usePasskey();
 
@@ -39,7 +41,8 @@ export function PasskeyAuth() {
         await SessionManager.createSession(
           normalizedUsername,
           result.credentialId!,
-          `${normalizedUsername}@ebas.demo`
+          `${normalizedUsername}@ebas.demo`,
+          role || undefined
         );
 
         setStatus(`✅ Registrado y conectado como ${normalizedUsername}`);
@@ -50,7 +53,7 @@ export function PasskeyAuth() {
         setStatus('❌ Error guardando la sesión localmente');
         return;
       }
-      
+
     } catch (err) {
       console.error('Registration error:', err);
       setStatus(`❌ Error al registrar: ${err instanceof Error ? err.message : 'Error desconocido'}`);
@@ -109,7 +112,8 @@ export function PasskeyAuth() {
       await SessionManager.createSession(
         credential.username,
         result.credentialId!,
-        credential.email || `${credential.username}@ebas.demo`
+        credential.email || `${credential.username}@ebas.demo`,
+        role || credential.role
       );
 
       setStatus(`✅ ¡Bienvenido de vuelta, ${credential.username}!`);
@@ -118,7 +122,7 @@ export function PasskeyAuth() {
       setTimeout(() => {
         router.push('/dashboard');
       }, 1000);
-      
+
     } catch (err) {
       console.error('Authentication error:', err);
       setStatus(`❌ Error al autenticar: ${err instanceof Error ? err.message : 'Error desconocido'}`);
@@ -224,13 +228,12 @@ export function PasskeyAuth() {
       {/* Mensaje de estado */}
       {(status || error) && (
         <div
-          className={`p-4 rounded-xl border backdrop-blur-sm transition-all ${
-            error
+          className={`p-4 rounded-xl border backdrop-blur-sm transition-all ${error
               ? "bg-red-500/10 text-red-200 border-red-500/30"
               : status.includes("✅")
-              ? "bg-green-500/10 text-green-200 border-green-500/30"
-              : "bg-blue-500/10 text-blue-200 border-blue-500/30"
-          }`}
+                ? "bg-green-500/10 text-green-200 border-green-500/30"
+                : "bg-blue-500/10 text-blue-200 border-blue-500/30"
+            }`}
         >
           <p className="text-sm font-medium break-words flex items-center gap-2">
             <span>{error?.charAt(0) === '❌' ? '❌' : status?.charAt(0) || 'ℹ'}</span>

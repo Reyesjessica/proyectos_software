@@ -9,6 +9,7 @@ export interface UserSession {
     id: string;
     username: string;
     email?: string;
+    role?: string;
     walletAddress: string;
     credentialId: string;
   };

@@ -5,190 +5,114 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 text-white overflow-hidden">
-      {/* Animated Background Spheres */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float"></div>
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-blue-500 to-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" style={{animationDelay: '2s'}}></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-pink-500 to-rose-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-float" style={{animationDelay: '4s'}}></div>
-      </div>
+    <div className="min-h-screen font-sans selection:bg-emerald-200" style={{ backgroundImage: "url('/landing-bg.png')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}>
+      <div className="min-h-screen bg-white/90 backdrop-blur-sm">
 
-      {/* Navigation */}
-      <nav className="relative z-20 px-6 pt-6 border-b border-white/5 backdrop-blur-sm">
-        <div className="mx-auto max-w-7xl flex items-center justify-between py-4">
-          <Link href="/" className="flex items-center space-x-3 group">
-            <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center group-hover:shadow-lg group-hover:shadow-purple-500/50 transition-all">
-              <span className="text-white font-bold text-2xl">🏦</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-white font-bold text-xl">EBAS</span>
-              <span className="text-xs text-purple-300">Credit Score</span>
-            </div>
-          </Link>
-          
-          <div className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-gray-300 hover:text-white transition-colors">Características</a>
-            <a href="#security" className="text-gray-300 hover:text-white transition-colors">Seguridad</a>
-            <a href="#about" className="text-gray-300 hover:text-white transition-colors">Acerca de</a>
-          </div>
-
-          <Link 
-            href="/register"
-            className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/50"
-          >
-            Empezar
-          </Link>
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <div className="relative z-10 px-6 pt-20 pb-32">
-        <div className="mx-auto max-w-4xl text-center">
-          <div className="inline-block mb-6 px-4 py-2 bg-purple-500/10 border border-purple-500/20 rounded-full">
-            <span className="text-purple-300 text-sm font-semibold">🚀 Plataforma de Crédito Blockchain</span>
-          </div>
-          
-          <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400">
-              Acceso a Crédito
-            </span>
-            <br />
-            <span className="text-white">Seguro y Rápido</span>
-          </h1>
-
-          <p className="text-lg md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-12 font-light">
-            Obtén puntuación de crédito verificada por biometría con tecnología Stellar. 
-            Sin contraseñas, sin complicaciones, solo <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">seguridad blockchain</span>.
-          </p>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Link
-              href="/register"
-              className="group px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/50 transform hover:scale-105 text-lg"
-            >
-              Crear Cuenta con Passkey
-              <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+        {/* Navigation */}
+        <nav className="relative z-20 border-b border-slate-100 bg-white/80 backdrop-blur-md">
+          <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
+            <Link href="/" className="flex items-center space-x-2 group">
+              <div className="w-10 h-10 bg-gradient-to-tr from-emerald-600 to-teal-600 rounded-lg flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                <span className="text-white font-bold text-xl">🏛️</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="font-bold text-xl text-slate-900">Comunichain</span>
+                <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">Gestión Pública</span>
+              </div>
             </Link>
-            
-            <Link
-              href="/login"
-              className="px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold rounded-xl transition-all duration-300 hover:shadow-lg text-lg backdrop-blur-sm"
-            >
-              Ya tengo cuenta
-            </Link>
-          </div>
 
-          {/* Trust Indicators */}
-          <div className="flex flex-col sm:flex-row gap-8 justify-center text-center">
-            <div className="flex flex-col items-center">
-              <div className="text-3xl mb-2">🔐</div>
-              <p className="text-gray-300 text-sm">Sin Contraseñas</p>
-              <p className="text-xs text-gray-500">Biometría segura</p>
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#features" className="text-slate-500 hover:text-emerald-600 font-medium transition-colors">Características</a>
+              <a href="#security" className="text-slate-500 hover:text-emerald-600 font-medium transition-colors">Blockchain</a>
             </div>
-            <div className="flex flex-col items-center">
-              <div className="text-3xl mb-2">⚡</div>
-              <p className="text-gray-300 text-sm">Instantáneo</p>
-              <p className="text-xs text-gray-500">Resultado en segundos</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <div className="text-3xl mb-2">🌍</div>
-              <p className="text-gray-300 text-sm">Blockchain</p>
-              <p className="text-xs text-gray-500">Transacciones transparentes</p>
-            </div>
+
+            {/* Officer Access Button Removed */}
           </div>
-        </div>
-      </div>
+        </nav>
 
-      {/* Features Section */}
-      <div id="features" className="relative z-10 px-6 py-20 bg-gradient-to-b from-purple-500/5 to-transparent border-y border-white/5">
-        <div className="mx-auto max-w-6xl">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 text-white">
-            Características Principales
-          </h2>
-          <p className="text-center text-gray-400 mb-16 text-lg max-w-2xl mx-auto">
-            Una plataforma diseñada para ofrecer seguridad, velocidad y transparencia
-          </p>
+        {/* Hero Section with 3 Roles */}
+        <div className="relative pt-20 pb-32 overflow-hidden">
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-50 rounded-full blur-3xl -z-10 opacity-50 translate-x-1/3 -translate-y-1/4"></div>
+          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-teal-50 rounded-full blur-3xl -z-10 opacity-50 -translate-x-1/3 translate-y-1/4"></div>
 
-          <div className="grid md:grid-cols-4 gap-4">
-            {[
-              { icon: "🔑", title: "WebAuthn", desc: "Autenticación biométrica" },
-              { icon: "📊", title: "Scoring", desc: "Puntuación instantánea" },
-              { icon: "🔐", title: "Secure", desc: "Encriptación blockchain" },
-              { icon: "⚡", title: "Rápido", desc: "Respuesta en segundos" },
-            ].map((feature, i) => (
-              <div 
-                key={i} 
-                className="group bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-xl p-6 border border-purple-500/20 hover:border-purple-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20"
-              >
-                <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">{feature.icon}</div>
-                <h3 className="font-bold text-white mb-2">{feature.title}</h3>
-                <p className="text-sm text-gray-400 group-hover:text-gray-300">{feature.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+          <div className="mx-auto max-w-7xl px-6 text-center">
+            <div className="inline-block mb-6 px-4 py-1.5 bg-emerald-50 border border-emerald-100 rounded-full">
+              <span className="text-emerald-700 text-sm font-bold tracking-wide">🚀 Gobernanza Descentralizada en Stellar</span>
+            </div>
 
-      {/* Security Section */}
-      <div id="security" className="relative z-10 px-6 py-20">
-        <div className="mx-auto max-w-4xl">
-          <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-2xl p-8 border border-blue-500/20">
-            <h2 className="text-3xl font-bold text-white mb-6">🛡️ Seguridad Garantizada</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="flex gap-4">
-                <div className="text-2xl flex-shrink-0">✓</div>
-                <div>
-                  <h3 className="font-semibold text-white mb-1">Credenciales Locales</h3>
-                  <p className="text-sm text-gray-400">Tus datos nunca salen de tu dispositivo</p>
+            <h1 className="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight text-slate-900 leading-tight">
+              Transparencia Total <br />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-600">
+                Para Tu Comunidad
+              </span>
+            </h1>
+
+            <p className="text-xl text-slate-500 max-w-2xl mx-auto mb-16 leading-relaxed">
+              Plataforma blockchain para la gestión inmutable de recursos públicos.
+              <br />
+              <span className="font-semibold text-slate-700">Selecciona tu perfil para continuar:</span>
+            </p>
+
+            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              {/* 1. Gobierno */}
+              <div className="group bg-white p-8 rounded-3xl shadow-lg border border-slate-100 hover:border-emerald-500/50 hover:shadow-2xl hover:shadow-emerald-500/10 transition-all duration-300 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="relative z-10">
+                  <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-3xl mb-6 mx-auto group-hover:scale-110 transition-transform">
+                    🏛️
+                  </div>
+                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Funcionario</h3>
+                  <p className="text-slate-500 mb-8 min-h-[3rem]">
+                    Gestiona presupuestos, aprueba obras y registra avances oficiales.
+                  </p>
+                  <Link href="/login?role=official" className="block w-full py-4 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-colors shadow-lg shadow-slate-900/20">
+                    Ingreso Gobierno
+                  </Link>
                 </div>
               </div>
-              <div className="flex gap-4">
-                <div className="text-2xl flex-shrink-0">✓</div>
-                <div>
-                  <h3 className="font-semibold text-white mb-1">Blockchain Verificado</h3>
-                  <p className="text-sm text-gray-400">Transacciones en red Stellar</p>
+
+              {/* 2. Presidente Comunidad */}
+              <div className="group bg-white p-8 rounded-3xl shadow-lg border border-slate-100 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="relative z-10">
+                  <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6 mx-auto group-hover:scale-110 transition-transform">
+                    🤝
+                  </div>
+                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Líder Comunitario</h3>
+                  <p className="text-slate-500 mb-8 min-h-[3rem]">
+                    Solicita financiamiento para obras y supervisa el uso de recursos.
+                  </p>
+                  <Link href="/login?role=community" className="block w-full py-4 bg-white border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 transition-all">
+                    Ingreso Comunidad
+                  </Link>
                 </div>
               </div>
-              <div className="flex gap-4">
-                <div className="text-2xl flex-shrink-0">✓</div>
-                <div>
-                  <h3 className="font-semibold text-white mb-1">Sin Terceros</h3>
-                  <p className="text-sm text-gray-400">Control total sobre tu información</p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="text-2xl flex-shrink-0">✓</div>
-                <div>
-                  <h3 className="font-semibold text-white mb-1">Auditable</h3>
-                  <p className="text-sm text-gray-400">Historial transparente e inmutable</p>
+
+              {/* 3. Ciudadanos */}
+              <div className="group bg-white p-8 rounded-3xl shadow-lg border border-slate-100 hover:border-amber-500/50 hover:shadow-2xl hover:shadow-amber-500/10 transition-all duration-300 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="relative z-10">
+                  <div className="w-16 h-16 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center text-3xl mb-6 mx-auto group-hover:scale-110 transition-transform">
+                    👁️
+                  </div>
+                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Ciudadanía</h3>
+                  <p className="text-slate-500 mb-8 min-h-[3rem]">
+                    Consulta el estado de proyectos y audita el gasto público.
+                  </p>
+                  <Link href="/public-dashboard" className="block w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-emerald-500/30 transition-all">
+                    Ver Portal Público
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* CTA Bottom */}
-      <div className="relative z-10 px-6 py-20 text-center">
-        <h2 className="text-4xl font-bold text-white mb-6">¿Listo para comenzar?</h2>
-        <p className="text-gray-400 mb-8 text-lg max-w-2xl mx-auto">
-          Crea tu cuenta en segundos y obtén acceso a crédito seguro y verificado
-        </p>
-        <Link
-          href="/register"
-          className="inline-block px-10 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-bold rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/50 transform hover:scale-105 text-lg"
-        >
-          Empezar Ahora
-        </Link>
+        {/* Footer */}
+        <footer className="py-8 bg-white text-center border-t border-slate-100">
+          <p className="text-slate-400 text-sm">© 2025 Comunichain. Construido sobre Stellar Network.</p>
+        </footer>
       </div>
-
-      {/* Footer */}
-      <footer className="relative z-10 border-t border-white/5 px-6 py-8">
-        <div className="mx-auto max-w-7xl text-center text-gray-500 text-sm">
-          <p>© 2024 EBAS Credit Score. Impulsado por Stellar y WebAuthn.</p>
-        </div>
-      </footer>
     </div>
   );
 }

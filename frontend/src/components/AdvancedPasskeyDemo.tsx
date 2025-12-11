@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Keypair, Account, BASE_FEE, TransactionBuilder, Networks, Operation } from '@stellar/stellar-sdk';
+// Stellar SDK will be imported dynamically to avoid SSR issues
 import {
   createPasskey,
   authenticateWithPasskey,
@@ -15,11 +15,11 @@ import {
   PasskeyCredentials,
   WebAuthnError
 } from '@/lib/webauthn-advanced';
-import { 
-  deployWebAuthnAccount, 
+import {
+  deployWebAuthnAccount,
   validateStellarConfig,
   buildAuthTransaction,
-  processWebAuthnSignature 
+  processWebAuthnSignature
 } from '@/lib/stellar-advanced';
 
 interface PasskeyState {
@@ -59,8 +59,8 @@ const AdvancedPasskeyDemo: React.FC<AdvancedPasskeyDemoProps> = ({ onSuccess, on
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [bundlerKey, setBundlerKey] = useState<Keypair | null>(null);
-  
+  const [bundlerKey, setBundlerKey] = useState<any>(null);
+
   // Estados de UI
   const [currentStep, setCurrentStep] = useState<'setup' | 'register' | 'authenticate' | 'dashboard'>('setup');
 
@@ -70,7 +70,7 @@ const AdvancedPasskeyDemo: React.FC<AdvancedPasskeyDemoProps> = ({ onSuccess, on
       // Verificar soporte del navegador
       const webauthnSupported = await isWebAuthnSupported();
       const windowsHelloSupported = await isWindowsHelloAvailable();
-      
+
       setBrowserSupport({
         supported: webauthnSupported,
         platformAuthenticator: windowsHelloSupported,
@@ -83,14 +83,19 @@ const AdvancedPasskeyDemo: React.FC<AdvancedPasskeyDemoProps> = ({ onSuccess, on
         setError(`🔧 Configuración: ${error instanceof Error ? error.message : 'Error desconocido'}`);
       }
 
-      // Configurar bundler key
-      let bundler = localStorage.getItem('bundler-key');
-      if (!bundler) {
-        const newBundler = Keypair.random();
-        localStorage.setItem('bundler-key', newBundler.secret());
-        bundler = newBundler.secret();
+      // Configurar bundler key - use dynamic import
+      try {
+        const { Keypair } = await import('@stellar/stellar-sdk');
+        let bundler = localStorage.getItem('bundler-key');
+        if (!bundler) {
+          const newBundler = Keypair.random();
+          localStorage.setItem('bundler-key', newBundler.secret());
+          bundler = newBundler.secret();
+        }
+        setBundlerKey(Keypair.fromSecret(bundler));
+      } catch (e) {
+        console.error('Error initializing bundler key:', e);
       }
-      setBundlerKey(Keypair.fromSecret(bundler));
 
       // Cargar datos de passkey si existen
       const savedPasskeyData = localStorage.getItem('passkey-data');
@@ -149,12 +154,12 @@ const AdvancedPasskeyDemo: React.FC<AdvancedPasskeyDemoProps> = ({ onSuccess, on
     setLoading(true);
     setError('');
     setSuccess('');
-    
+
     try {
       // Crear passkey
       setSuccess('🔐 Creando passkey...');
       const result = await createPasskey(passkeyState.username);
-      
+
       // Validar el resultado
       if (!validateRegistrationResult(result)) {
         setError('❌ Error: resultado de registro inválido');
@@ -172,12 +177,12 @@ const AdvancedPasskeyDemo: React.FC<AdvancedPasskeyDemoProps> = ({ onSuccess, on
         setError(`❌ Error extrayendo clave pública: ${extractError instanceof Error ? extractError.message : 'Error desconocido'}`);
         return;
       }
-      
+
       // Desplegar cuenta en Stellar
       setSuccess('🚀 Desplegando cuenta en Stellar...');
       const accountAddress = await deployWebAuthnAccount(
-        bundlerKey, 
-        Buffer.from(keyInfo.contractSalt), 
+        bundlerKey,
+        Buffer.from(keyInfo.contractSalt),
         Buffer.from(keyInfo.publicKey)
       );
 
@@ -188,12 +193,12 @@ const AdvancedPasskeyDemo: React.FC<AdvancedPasskeyDemoProps> = ({ onSuccess, on
         accountAddress,
         publicKey: Buffer.from(keyInfo.publicKey).toString('hex'),
       };
-      
+
       setPasskeyState(newPasskeyState);
       localStorage.setItem('passkey-data', JSON.stringify(newPasskeyState));
 
       setSuccess('🎉 ¡Cuenta creada exitosamente! Redirigiendo al dashboard...');
-      
+
       // Llamar a onSuccess si está disponible
       if (onSuccess) {
         onSuccess({
@@ -208,7 +213,7 @@ const AdvancedPasskeyDemo: React.FC<AdvancedPasskeyDemoProps> = ({ onSuccess, on
           setCurrentStep('dashboard');
         }, 1500);
       }
-      
+
     } catch (error) {
       console.error('Error en registro:', error);
       if (error instanceof WebAuthnError) {
@@ -241,11 +246,11 @@ const AdvancedPasskeyDemo: React.FC<AdvancedPasskeyDemoProps> = ({ onSuccess, on
 
     try {
       setSuccess('🔐 Autenticando con passkey...');
-      
+
       // Autenticar con passkey
       setSuccess('🔑 Autenticando con Windows Hello...');
       const result = await authenticateWithPasskey(passkeyState.credentialId);
-      
+
       // Validar el resultado
       if (!validateAuthenticationResult(result)) {
         setError('❌ Error: resultado de autenticación inválido');
@@ -268,7 +273,7 @@ const AdvancedPasskeyDemo: React.FC<AdvancedPasskeyDemoProps> = ({ onSuccess, on
       } else {
         setError('❌ Error procesando la firma');
       }
-      
+
     } catch (error) {
       setError(`❌ Error autenticando: ${error instanceof Error ? error.message : 'Error desconocido'}`);
       console.error('Error en autenticación:', error);
@@ -297,11 +302,10 @@ const AdvancedPasskeyDemo: React.FC<AdvancedPasskeyDemoProps> = ({ onSuccess, on
     if (!browserSupport) return null;
 
     return (
-      <div className={`mb-4 p-3 rounded-md text-sm backdrop-blur-sm border ${
-        browserSupport.supported 
-          ? 'bg-green-500/20 text-green-300 border-green-500/30'
-          : 'bg-red-500/20 text-red-300 border-red-500/30'
-      }`}>
+      <div className={`mb-4 p-3 rounded-md text-sm backdrop-blur-sm border ${browserSupport.supported
+        ? 'bg-green-500/20 text-green-300 border-green-500/30'
+        : 'bg-red-500/20 text-red-300 border-red-500/30'
+        }`}>
         {browserSupport.supported ? (
           <div>
             ✅ <strong>WebAuthn soportado</strong>
@@ -359,7 +363,7 @@ const AdvancedPasskeyDemo: React.FC<AdvancedPasskeyDemoProps> = ({ onSuccess, on
             <span>Volver</span>
           </button>
         )}
-        
+
         <button
           onClick={() => setCurrentStep('register')}
           disabled={loading || !passkeyState.username.trim() || !browserSupport?.supported}
@@ -426,7 +430,7 @@ const AdvancedPasskeyDemo: React.FC<AdvancedPasskeyDemoProps> = ({ onSuccess, on
         <h3 className="font-semibold text-green-300 mb-2">✅ Cuenta Activa</h3>
         <div className="text-green-200 text-sm space-y-2">
           <div>
-            <strong>Dirección:</strong> 
+            <strong>Dirección:</strong>
             <div className="font-mono text-xs break-all">
               {passkeyState.accountAddress}
             </div>

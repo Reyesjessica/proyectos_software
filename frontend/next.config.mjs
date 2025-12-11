@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  
+
   // Enable WebAuthn/Passkey support
   async headers() {
     return [
@@ -20,7 +20,12 @@ const nextConfig = {
       },
     ];
   },
-  
+
+  experimental: {
+    esmExternals: true,
+    serverComponentsExternalPackages: ['sodium-native', 'qrcode'],
+  },
+
   webpack: (config, { dev, isServer }) => {
     // Resolve fallbacks for Node.js modules
     config.resolve.fallback = {
@@ -39,20 +44,21 @@ const nextConfig = {
       path: false,
     };
 
-    // Ignore warnings from native modules
-    if (!isServer) {
-      config.ignoreWarnings = [
-        { module: /node_modules\/sodium-native/ },
-        { module: /node_modules\/require-addon/ },
-        /Critical dependency/,
-      ];
+    // Handle native modules
+    if (isServer) {
+      config.externals.push({
+        'sodium-native': 'commonjs sodium-native',
+      });
     }
 
-    return config;
-  },
+    // Ignore warnings from native modules
+    config.ignoreWarnings = [
+      { module: /node_modules\/sodium-native/ },
+      { module: /node_modules\/require-addon/ },
+      /Critical dependency/,
+    ];
 
-  experimental: {
-    esmExternals: true,
+    return config;
   },
 };
 
