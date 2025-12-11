@@ -113,7 +113,7 @@ const AdvancedPasskeyDemo: React.FC<AdvancedPasskeyDemoProps> = ({ onSuccess, on
         }
       }
 
-      // Cargar estado previo
+      // Cargar estado previo a la carga
       const savedState = localStorage.getItem('passkey-state');
       if (savedState) {
         const state = JSON.parse(savedState);
