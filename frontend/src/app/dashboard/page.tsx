@@ -795,7 +795,10 @@ export default function Dashboard() {
     try {
       // @ts-ignore - Dynamic import for qrcode library
       const QRCode = (await import('qrcode')).default;
-      const url = await QRCode.toDataURL(addr, { width: 400, margin: 2 });
+      // Generate URL that links to public dashboard with wallet address
+      const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://frontend-tau-jade-33.vercel.app';
+      const profileUrl = `${baseUrl}/public-dashboard?address=${addr}`;
+      const url = await QRCode.toDataURL(profileUrl, { width: 400, margin: 2 });
       setQrCodeDataUrl(url);
       setShowQrModal(true);
     } catch (e) {

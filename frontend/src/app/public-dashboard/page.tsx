@@ -27,24 +27,36 @@ export default function PublicDashboard() {
     const [votes, setVotes] = useState<Record<string, number>>({});
     const [viewProject, setViewProject] = useState<any>(null);
 
-    // Load "All" projects on mount (simulated Registry)
+    // Load projects - either from URL address param or default registry
     useEffect(() => {
-        const fetchRegistry = async () => {
+        const fetchProjects = async () => {
             setLoading(true);
             try {
+                // Check for address in URL query params (from QR code scan)
+                const urlParams = new URLSearchParams(window.location.search);
+                const addressParam = urlParams.get('address');
+
                 let allProjects: ProjectWithMeta[] = [];
 
-                // Try to load from known registry keys to populate the "All Oaxaca Projects" view
-                // We use Promise.allSettled to ignore failures from missing mock accounts
-                const results = await Promise.allSettled(
-                    OAXACA_REGISTRY_KEYS.map(key => loadProjectsFromStellar(key))
-                );
-
-                results.forEach(res => {
-                    if (res.status === 'fulfilled' && res.value.success && res.value.projects) {
-                        allProjects = [...allProjects, ...res.value.projects];
+                if (addressParam && /^G[A-Z0-9]{55}$/.test(addressParam)) {
+                    // Load from specific address (QR code scenario)
+                    setSearchTerm(addressParam);
+                    const result = await loadProjectsFromAccount(addressParam);
+                    if (result.success && result.projects) {
+                        allProjects = result.projects;
                     }
-                });
+                } else {
+                    // Default: Load from known registry keys to populate the "All Oaxaca Projects" view
+                    const results = await Promise.allSettled(
+                        OAXACA_REGISTRY_KEYS.map(key => loadProjectsFromStellar(key))
+                    );
+
+                    results.forEach(res => {
+                        if (res.status === 'fulfilled' && res.value.success && res.value.projects) {
+                            allProjects = [...allProjects, ...res.value.projects];
+                        }
+                    });
+                }
 
                 // Remove duplicates by name
                 const unique = Array.from(new Map(allProjects.map(item => [item.name, item])).values());
@@ -58,13 +70,14 @@ export default function PublicDashboard() {
                 setVotes(initialVotes);
 
             } catch (e) {
-                console.error("Error loading registry", e);
+                console.error("Error loading projects", e);
+                setError("Error cargando proyectos. Intenta de nuevo.");
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchRegistry();
+        fetchProjects();
     }, []);
 
     const handleSearch = async (e: React.FormEvent) => {
